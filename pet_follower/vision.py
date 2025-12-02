@@ -200,4 +200,75 @@ class DogDetector:
         return approx
 
 
-__all__ = ["CameraStream", "DogDetector", "DetectionResult"]
+class ColorDetector:
+    """Color-based detector that finds the largest blue area in the frame."""
+
+    def __init__(self) -> None:
+        # HSV range for deep blue color
+        # Lower bound: (H, S, V) - deep dark blue
+        # Upper bound: (H, S, V) - deep bright blue
+        # Deep blue: high saturation, medium-low brightness
+        self.lower_blue = (110, 100, 50)
+        self.upper_blue = (130, 255, 150)
+        self.min_area = 100  # Minimum contour area to consider
+        self.cfg = config.vision
+        self.model = "fake_model"
+
+    def detect_dog(self, frame) -> Optional[DetectionResult]:
+        """Detect the largest blue area in the frame."""
+        if frame is None:
+            return None
+
+        # Convert BGR to HSV
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+        # Create mask for blue color
+        mask = cv2.inRange(hsv, self.lower_blue, self.upper_blue)
+
+        # Find contours
+        contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+        if not contours:
+            return None
+
+        # Find the largest contour
+        largest_contour = max(contours, key=cv2.contourArea)
+
+        # Check if area is large enough
+        area = cv2.contourArea(largest_contour)
+        if area < self.min_area:
+            return None
+
+        # Get bounding box
+        x, y, w, h = cv2.boundingRect(largest_contour)
+        x1, y1 = float(x), float(y)
+        x2, y2 = float(x + w), float(y + h)
+
+        # Calculate center
+        center_x = (x1 + x2) / 2.0
+        center_y = (y1 + y2) / 2.0
+
+        # Calculate confidence based on area (normalized to frame size)
+        frame_height, frame_width = frame.shape[:2]
+        frame_area = frame_width * frame_height
+        confidence = min(area / frame_area * 10.0, 1.0)  # Scale and cap at 1.0
+
+        # Estimate distance (fixed at 20cm)
+        approx_distance = self._estimate_distance()
+
+        detection = DetectionResult(
+            center=(center_x, center_y),
+            bbox=(x1, y1, x2, y2),
+            confidence=confidence,
+            frame_size=(frame_height, frame_width),
+            approx_distance_cm=approx_distance,
+        )
+        logger.debug("Blue detected @ %s conf=%.2f", detection.center, confidence)
+        return detection
+
+    def _estimate_distance(self) -> float:
+        """Return fixed distance of 20cm."""
+        return 50
+
+
+__all__ = ["CameraStream", "DogDetector", "ColorDetector", "DetectionResult"]

@@ -29,7 +29,7 @@ class CameraConfig:
 class VisionConfig:
     model_path: Path = BASE_DIR / "models" / "yolov5s.torchscript"
     fallback_model: str = "yolov8n.pt"
-    conf_threshold: float = 0.45
+    conf_threshold: float = 0.25
     iou_threshold: float = 0.45
     dog_class_ids: Tuple[int, ...] = (16,)
     max_detections: int = 1
