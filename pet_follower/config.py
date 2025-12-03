@@ -48,8 +48,8 @@ class MotionConfig:
     turn_scale: float = 25.0
     center_deadband: int = 35
     safe_distance_cm: float = 55.0
-    stop_distance_cm: float = 45.0
-    retreat_distance_cm: float = 35.0
+    stop_distance_cm: float = 20
+    retreat_distance_cm: float = 10
     retreat_power: int = 30
     lost_target_timeout: float = 1.8
     search_pan_amplitude: int = 25

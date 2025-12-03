@@ -15,7 +15,7 @@ WINDOW_NAME = "PetFollower"
 
 def main() -> None:
     camera = CameraStream()
-    detector = ColorDetector()
+    detector = DogDetector()
     motion = MotionController()
     interaction = InteractionManager(motion)
 
@@ -49,27 +49,27 @@ def main() -> None:
                 )
                 dist = detection.approx_distance_cm
                 dist_str = f"{dist:.1f}cm" if dist is not None else "N/A"
-                print(f"Red detected! Pos: {detection.center}, Dist: {dist_str}")
             
             cv2.imshow(WINDOW_NAME, display)
             key = cv2.waitKey(1) & 0xFF
             if key in (27, ord("q"), ord("Q")):
                 break
             
-            #safe_to_move = motion.update_safety()
-            safe_to_move = True
+            safe_to_move = motion.update_safety()
             if not safe_to_move:
                 #interaction.tick(target_visible=False)
                 continue
             if detection is not None:
                 motion.track_target(detection)
             else:
-                motion.search()
+                if not motion.search():
+                    motion.turn90(1)
+                    motion.reset_target_time()
                 #motion.robot.stop()
             #interaction.tick(target_visible=detection is not None)
             time.sleep(0.1)
-            motion.robot.stop()
-            time.sleep(0.1)
+            #motion.robot.stop()
+            #time.sleep(0.1)
     except KeyboardInterrupt:
         logger.info("Pet follower interrupted by user")
     finally:

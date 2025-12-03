@@ -4,14 +4,14 @@ from __future__ import annotations
 import cv2
 
 from .log import logger
-from .vision import CameraStream, ColorDetector, DetectionResult
+from .vision import CameraStream, ColorDetector, DetectionResult, DogDetector
 
 WINDOW_NAME = "PetFollower Dog Viewer"
 
 
 def main() -> None:  # pragma: no cover - 需真实硬件
     camera = CameraStream()
-    detector = ColorDetector()
+    detector = DogDetector()
     camera.start()
 
     if detector.model is None:
