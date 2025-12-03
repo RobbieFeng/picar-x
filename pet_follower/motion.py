@@ -117,7 +117,7 @@ class MotionController:
         except Exception:  # pragma: no cover - servo optional
             pass
         self.robot.set_dir_servo_angle(pan_angle / 2)
-        self.robot.forward(self.cfg.search_speed)
+        # self.robot.forward(self.cfg.search_speed)
 
     # ------------------------------------------------------------------
     # Interaction helpers

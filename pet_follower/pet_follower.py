@@ -33,7 +33,7 @@ def main() -> None:
             if detection is not None:
                 x1, y1, x2, y2 = [int(v) for v in detection.bbox]
                 cv2.rectangle(display, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                label = "Blue"
+                label = "Red"
                 if detection.confidence is not None:
                     label += f" {detection.confidence:.2f}"
                 if detection.approx_distance_cm is not None:
@@ -49,7 +49,7 @@ def main() -> None:
                 )
                 dist = detection.approx_distance_cm
                 dist_str = f"{dist:.1f}cm" if dist is not None else "N/A"
-                print(f"Blue detected! Pos: {detection.center}, Dist: {dist_str}")
+                print(f"Red detected! Pos: {detection.center}, Dist: {dist_str}")
             
             cv2.imshow(WINDOW_NAME, display)
             key = cv2.waitKey(1) & 0xFF
@@ -64,8 +64,8 @@ def main() -> None:
             if detection is not None:
                 motion.track_target(detection)
             else:
-                #motion.search()
-                motion.robot.stop()
+                motion.search()
+                #motion.robot.stop()
             #interaction.tick(target_visible=detection is not None)
             time.sleep(0.1)
             motion.robot.stop()

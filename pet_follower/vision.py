@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Optional, Tuple
 
 import cv2
+import numpy as np
 import time
 
 from .config import config
@@ -39,6 +40,7 @@ class CameraStream:
         self._picam2: Optional["Picamera2"] = None  # type: ignore[name-defined]
         self._using_picamera2 = False
         self._preview_started = False
+        self._color_order: Optional[str] = None
 
     def start(self) -> None:
         """Open the video device and optionally kick off the Vilib preview."""
@@ -105,18 +107,30 @@ class CameraStream:
             if frame is None:
                 logger.warning("Picamera2 capture returned None")
                 return None
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
         else:
             assert self.cap is not None  # for mypy
             ret, frame = self.cap.read()
             if not ret:
                 logger.warning("Camera frame grab failed")
                 return None
+        
+        # Debug log to verify function call
+        # logger.debug("Processing frame in read()")
+        frame = self._ensure_bgr(frame)
+        
         if self.cfg.hflip:
             frame = cv2.flip(frame, 1)
         if self.cfg.vflip:
             frame = cv2.flip(frame, 0)
         return frame
+
+    def _ensure_bgr(self, frame):
+        # PASS-THROUGH: Do not swap. 
+        # If camera is BGR and display is BGR, this should work.
+        return frame
+
+    def _infer_color_order(self, frame) -> str:
+        return "rgb"
 
     def stop(self) -> None:
         if self._using_picamera2 and self._picam2 is not None:
@@ -201,29 +215,30 @@ class DogDetector:
 
 
 class ColorDetector:
-    """Color-based detector that finds the largest blue area in the frame."""
+    """Color-based detector that finds the largest red area in the frame."""
 
     def __init__(self) -> None:
-        # HSV range for deep blue color
-        # Lower bound: (H, S, V) - deep dark blue
-        # Upper bound: (H, S, V) - deep bright blue
-        # Deep blue: high saturation, medium-low brightness
-        self.lower_blue = (110, 100, 50)
-        self.upper_blue = (130, 255, 150)
+        # Red spans both low and high hue values, so use two intervals.
+        self.lower_red1 = (0, 120, 70)
+        self.upper_red1 = (10, 255, 255)
+        self.lower_red2 = (170, 120, 70)
+        self.upper_red2 = (180, 255, 255)
         self.min_area = 100  # Minimum contour area to consider
         self.cfg = config.vision
         self.model = "fake_model"
 
     def detect_dog(self, frame) -> Optional[DetectionResult]:
-        """Detect the largest blue area in the frame."""
+        """Detect the largest red area in the frame."""
         if frame is None:
             return None
 
         # Convert BGR to HSV
         hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
-        # Create mask for blue color
-        mask = cv2.inRange(hsv, self.lower_blue, self.upper_blue)
+        # Create mask for red color (two ranges)
+        mask1 = cv2.inRange(hsv, self.lower_red1, self.upper_red1)
+        mask2 = cv2.inRange(hsv, self.lower_red2, self.upper_red2)
+        mask = cv2.bitwise_or(mask1, mask2)
 
         # Find contours
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -263,7 +278,7 @@ class ColorDetector:
             frame_size=(frame_height, frame_width),
             approx_distance_cm=approx_distance,
         )
-        logger.debug("Blue detected @ %s conf=%.2f", detection.center, confidence)
+        logger.debug("Red detected @ %s conf=%.2f", detection.center, confidence)
         return detection
 
     def _estimate_distance(self) -> float:

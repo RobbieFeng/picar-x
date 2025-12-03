@@ -19,9 +19,9 @@ class CameraConfig:
     vflip: bool = False
     use_picamera2: bool = True
     picamera_format: str = "RGB888"
-    use_vilib_preview: bool = True
+    use_vilib_preview: bool = False
     preview_local: bool = False
-    preview_web: bool = True
+    preview_web: bool = False
     preview_show_fps: bool = True
 
 
