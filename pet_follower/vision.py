@@ -215,7 +215,7 @@ class DogDetector:
 
 
 class ColorDetector:
-    """Color-based detector that finds the largest red area in the frame."""
+    """Just for testing."""
 
     def __init__(self) -> None:
         # Red spans both low and high hue values, so use two intervals.
