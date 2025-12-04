@@ -4,7 +4,7 @@ from __future__ import annotations
 import cv2
 
 from .log import logger
-from .vision import CameraStream, DogDetector
+from .vision import CameraStream, ColorDetector, DetectionResult, DogDetector
 
 WINDOW_NAME = "PetFollower Dog Viewer"
 

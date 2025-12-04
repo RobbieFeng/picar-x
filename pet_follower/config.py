@@ -19,9 +19,9 @@ class CameraConfig:
     vflip: bool = False
     use_picamera2: bool = True
     picamera_format: str = "RGB888"
-    use_vilib_preview: bool = True
+    use_vilib_preview: bool = False
     preview_local: bool = False
-    preview_web: bool = True
+    preview_web: bool = False
     preview_show_fps: bool = True
 
 
@@ -29,7 +29,7 @@ class CameraConfig:
 class VisionConfig:
     model_path: Path = BASE_DIR / "models" / "yolov5s.torchscript"
     fallback_model: str = "yolov8n.pt"
-    conf_threshold: float = 0.45
+    conf_threshold: float = 0.25
     iou_threshold: float = 0.45
     dog_class_ids: Tuple[int, ...] = (16,)
     max_detections: int = 1
@@ -46,14 +46,18 @@ class MotionConfig:
     search_speed: int = 25
     wobble_speed: int = 30
     turn_scale: float = 25.0
-    center_deadband: int = 35
+    center_deadband: int = 15
     safe_distance_cm: float = 55.0
-    stop_distance_cm: float = 45.0
-    retreat_distance_cm: float = 35.0
+    stop_distance_cm: float = 20
+    retreat_distance_cm: float = 10
     retreat_power: int = 30
     lost_target_timeout: float = 1.8
     search_pan_amplitude: int = 25
     search_interval: float = 2.0
+    pursuit_hold_time: float = 0.8
+    interaction_distance_cm: float = 40
+    celebration_duration: float = 6.0
+    celebration_cooldown: float = 10.0
     obstacle_check_interval: float = 0.2
     cliff_check_interval: float = 0.4
     enable_cliff_detection: bool = False
