@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass
-from typing import Optional
+from typing import Callable, Optional
 
 from picarx import Picarx
 
@@ -29,6 +29,8 @@ class MotionController:
         self._search_direction = 1
         self.safety = SafetyState()
         self._current_pan = 0.0
+        self._last_celebration = 0.0
+        self._celebration_handler: Optional[Callable[[], None]] = None
         logger.info("Motion controller initialized")
 
     # ------------------------------------------------------------------
@@ -83,38 +85,42 @@ class MotionController:
     def track_target(self, detection: DetectionResult) -> None:
         self._last_target_time = time.monotonic()
 
-        # Slowly recenter camera pan
-        # because the camera is turned to left/right during search, we need to recenter it
-        if abs(self._current_pan) > 1:
-            # Move towards 0 by 2 degrees per update
-            step = 2.0
-            if self._current_pan > 0:
-                self._current_pan = max(0.0, self._current_pan - step)
-            else:
-                self._current_pan = min(0.0, self._current_pan + step)
-            try:
-                self.robot.set_cam_pan_angle(self._current_pan)
-            except Exception:
-                pass
-        else:
-            self._current_pan = 0.0
-
         _, frame_width = detection.frame_size
         offset = detection.center[0] - frame_width / 2
         normalized = offset / max(frame_width / 2, 1)
+        if abs(self._current_pan) > 0.1:
+            try:
+                self.robot.set_cam_pan_angle(0)
+            except Exception:
+                pass
+            self._current_pan = 0.0
         if abs(offset) <= self.cfg.center_deadband:
             steering = 0.0
         else:
             steering = normalized * self.cfg.turn_scale
-        
+
         # Add head angle contribution to steering (look where you look)
         # If looking right (positive pan), steer right
         steering += self._current_pan
 
-        steering = max(min(steering, 30), -30)
-        self.robot.set_dir_servo_angle(steering)
+        steering_cmd = max(min(steering, 30), -30)
+        self.robot.set_dir_servo_angle(steering_cmd)
 
         desired_speed = self.cfg.forward_speed
+        distance = self.safety.distance_cm
+        if distance is not None:
+            if distance <= self.cfg.interaction_distance_cm:
+                logger.info(
+                    "Ultrasonic distance %.1f cm <= interaction threshold %.1f cm",
+                    distance,
+                    self.cfg.interaction_distance_cm,
+                )
+                self._trigger_celebration()
+                return
+            if distance < self.cfg.stop_distance_cm:
+                logger.debug("Ultrasonic limit reached @ %.1f cm", distance)
+                self.robot.stop()
+                return
         if detection.approx_distance_cm is not None:
             if detection.approx_distance_cm < self.cfg.stop_distance_cm:
                 logger.debug(
@@ -124,11 +130,15 @@ class MotionController:
                 return
             if detection.approx_distance_cm < self.cfg.safe_distance_cm:
                 desired_speed = max(self.cfg.forward_speed // 2, 20)
-        distance = self.safety.distance_cm
-        if distance is not None and distance < self.cfg.stop_distance_cm:
-            logger.debug("Ultrasonic limit reached @ %.1f cm", distance)
-            self.robot.stop()
-            return
+        logger.debug(
+            "track_target offset=%.1f norm=%.2f cam=%.1f steer=%.1f speed=%d dist=%s",
+            offset,
+            normalized,
+            self._current_pan,
+            steering_cmd,
+            desired_speed,
+            f"{detection.approx_distance_cm:.1f}cm" if detection.approx_distance_cm else "N/A",
+        )
         self.robot.forward(desired_speed)
 
     def reset_target_time(self) -> None:
@@ -136,11 +146,17 @@ class MotionController:
 
     def search(self) -> bool:
         now = time.monotonic()
-        if now - self._last_target_time < self.cfg.lost_target_timeout:
+        elapsed = now - self._last_target_time
+        if elapsed < self.cfg.lost_target_timeout:
+            logger.debug(
+                "Search wait: %.2fs remaining before sweep",
+                self.cfg.lost_target_timeout - elapsed,
+            )
             self.robot.stop()
             return True
-        if now - self._last_target_time > self.cfg.lost_target_timeout * 3:
-             return False
+        if elapsed > self.cfg.lost_target_timeout * 3:
+            logger.info("Search timeout exceeded - request chassis turn")
+            return False
         if now - self._last_search_toggle > self.cfg.search_interval:
             self._search_direction *= -1
             self._last_search_toggle = now
@@ -150,6 +166,7 @@ class MotionController:
             self.robot.set_cam_pan_angle(pan_angle)
         except Exception:  # pragma: no cover - servo optional
             pass
+        logger.debug("Sweeping camera pan=%s direction=%s", pan_angle, self._search_direction)
         return True
         #self.robot.set_dir_servo_angle(pan_angle / 2)
         # self.robot.forward(self.cfg.search_speed)
@@ -191,6 +208,25 @@ class MotionController:
             self.robot.set_cam_tilt_angle(0)
         except Exception:  # pragma: no cover - servo optional
             pass
+
+    def register_celebration_handler(self, handler: Callable[[], None]) -> None:
+        self._celebration_handler = handler
+
+    def _trigger_celebration(self) -> None:
+        now = time.monotonic()
+        if now - self._last_celebration < self.cfg.celebration_cooldown:
+            logger.debug("Celebration on cooldown - skipping handler call")
+            return
+        if self._celebration_handler is None:
+            logger.info("Celebration triggered but no handler registered")
+            return
+        self._last_celebration = now
+        self.robot.stop()
+        try:
+            self._celebration_handler()
+        except Exception as exc:
+            logger.warning("Celebration handler failed: %s", exc)
+        self._last_target_time = time.monotonic()
 
 
 __all__ = ["MotionController", "SafetyState"]
