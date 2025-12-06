@@ -7,7 +7,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict
 
-from fastapi import FastAPI
+import httpx
+from fastapi import FastAPI, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
@@ -15,6 +16,9 @@ from fastapi.staticfiles import StaticFiles
 # Get the directory where this file is located
 BASE_DIR = Path(__file__).parent
 ASSETS_DIR = BASE_DIR / "assets"
+
+# GCP server configuration
+GCP_SERVER_URL = "http://34.61.99.220:5000"  # GCP server URL
 
 app = FastAPI(title="Pet Follower Dashboard (Mock)", version="1.0.0")
 app.add_middleware(
@@ -50,6 +54,8 @@ mock_state = {
     "obstacle_distance": 45.0,
     "last_detection": time.time() - 2,
 }
+
+
 
 
 @app.get("/")
@@ -154,6 +160,41 @@ async def sse_events():
 
 # Mount static assets directory
 app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
+
+
+@app.get("/api/gcp-log")
+async def get_gcp_log():
+    """Proxy endpoint to fetch log from GCP server."""
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(f"{GCP_SERVER_URL}/api/today-log-path")
+            if resp.status_code == 200:
+                data = resp.json()
+                log_content = data.get("content", "")
+                log_path = data.get("log_path", "")
+                
+                # Parse JSONL content into entries
+                entries = []
+                if log_content:
+                    lines = [line.strip() for line in log_content.split("\n") if line.strip()]
+                    for line in lines:
+                        try:
+                            entries.append(json.loads(line))
+                        except json.JSONDecodeError:
+                            pass
+                
+                return {
+                    "status": "ok",
+                    "log_path": log_path,
+                    "entries": entries,
+                    "content": log_content,
+                }
+            else:
+                return {"status": "error", "error": f"HTTP {resp.status_code}"}, resp.status_code
+    except httpx.TimeoutException:
+        return {"status": "error", "error": "Timeout connecting to GCP server"}, 504
+    except Exception as exc:
+        return {"status": "error", "error": str(exc)}, 500
 
 
 if __name__ == "__main__":

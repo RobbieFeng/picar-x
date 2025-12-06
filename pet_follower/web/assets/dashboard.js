@@ -37,8 +37,10 @@ let config = {
 };
 let pollTimer = null;
 let eventSource = null;
+let consolePollTimer = null;
 let resolvedBaseUrl = "";
-const LOCAL_JSONL_PATH = "assets/pet_log.jsonl";
+const GCP_LOG_ENDPOINT = "/api/gcp-log";
+const CONSOLE_POLL_INTERVAL = 10000; // 10 seconds
 
 function loadConfig() {
   try {
@@ -301,39 +303,56 @@ function setupConsole() {
       loadLocalConsoleLog();
     });
   }
+  // Load immediately
   loadLocalConsoleLog();
+  // Start auto-polling
+  startConsolePolling();
+}
+
+function startConsolePolling() {
+  if (consolePollTimer) clearInterval(consolePollTimer);
+  consolePollTimer = setInterval(() => {
+    loadLocalConsoleLog();
+  }, CONSOLE_POLL_INTERVAL);
 }
 
 async function loadLocalConsoleLog() {
   if (!els.consoleBody) return;
   try {
-    const resp = await fetch(LOCAL_JSONL_PATH, { cache: "no-store" });
+    const resp = await fetch(GCP_LOG_ENDPOINT, { cache: "no-store" });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const text = await resp.text();
-    const lines = text.split(/\r?\n/).filter((line) => line.trim().length > 0);
-
-    const entries = [];
-    for (const line of lines) {
-      try {
-        entries.push(JSON.parse(line));
-      } catch (err) {
-        entries.push({
-          ts: "",
-          level: "error",
-          source: "console",
-          msg: "Invalid JSONL line",
-          extra: { line },
-        });
+    const data = await resp.json();
+    
+    if (data.status === "ok") {
+      // Use entries if available, otherwise parse content
+      let entries = data.entries || [];
+      if (!entries.length && data.content) {
+        const lines = data.content.split(/\r?\n/).filter((line) => line.trim().length > 0);
+        for (const line of lines) {
+          try {
+            entries.push(JSON.parse(line));
+          } catch (err) {
+            entries.push({
+              ts: "",
+              level: "error",
+              source: "console",
+              msg: "Invalid JSONL line",
+              extra: { line },
+            });
+          }
+        }
       }
+      renderConsoleLog(entries);
+    } else {
+      throw new Error(data.error || "Unknown error");
     }
-    renderConsoleLog(entries);
   } catch (err) {
     renderConsoleLog([
       {
         ts: "",
         level: "error",
         source: "console",
-        msg: `Failed to load pet_log.jsonl: ${err.message}`,
+        msg: `Failed to load log from GCP: ${err.message}`,
       },
     ]);
   }
