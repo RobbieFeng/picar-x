@@ -35,7 +35,9 @@ def main() -> None:
             # Create display frame with visualization
             display = frame.copy()
             now = time.monotonic()
-            active_detection = detection
+
+            # for stability
+            active_detection = detection # result being used
             holding_last = False
             if detection is not None:
                 last_detection = detection
@@ -56,7 +58,7 @@ def main() -> None:
             if draw_detection is not None:
                 x1, y1, x2, y2 = [int(v) for v in draw_detection.bbox]
                 cv2.rectangle(display, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                label = "Red"
+                label = "Pet"
                 if draw_detection.confidence is not None:
                     label += f" {draw_detection.confidence:.2f}"
                 if draw_detection.approx_distance_cm is not None:

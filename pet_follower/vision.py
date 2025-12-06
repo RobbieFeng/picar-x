@@ -177,7 +177,7 @@ class DogDetector:
             frame,
             conf=self.cfg.conf_threshold,
             iou=self.cfg.iou_threshold,
-            classes=list(self.cfg.dog_class_ids),
+            classes=list(self.cfg.dog_class_ids), # change here to detect other animals
             device=self.cfg.device,
             half=self.cfg.use_half_precision,
             verbose=False,
