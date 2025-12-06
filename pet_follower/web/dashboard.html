@@ -145,6 +145,25 @@
           </article>
         </div>
       </section>
+
+      <section class="console-section">
+        <article class="panel console-panel">
+          <header>
+            <h2>Robot Console</h2>
+            <div class="mini-actions">
+              <span class="console-file-label">
+                Source:
+                <code>assets/pet_log.jsonl</code>
+              </span>
+              <label class="checkbox inline">
+                <input type="checkbox" id="consoleAutoScroll" checked /> Auto scroll
+              </label>
+              <button class="ghost" id="consoleReload">Reload</button>
+            </div>
+          </header>
+          <div id="robotConsole" class="console-body"></div>
+        </article>
+      </section>
     </div>
     <script src="assets/dashboard.js"></script>
   </body>

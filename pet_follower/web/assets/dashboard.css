@@ -350,6 +350,118 @@ button.ghost {
   color: var(--muted);
 }
 
+.console-section {
+  margin-top: 4px;
+}
+
+.console-panel {
+  min-height: 420px;
+}
+
+.console-file-label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.console-file-label code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+  font-size: 0.8em;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: #e5ebff;
+  color: #1d2a4a;
+}
+
+.console-body {
+  margin-top: 10px;
+  border-radius: 16px;
+  background: #f9fafb;
+  color: var(--text);
+  padding: 10px 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.console-entry {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border: 1px solid #e5e7eb;
+  border-left-width: 3px;
+  border-left-color: var(--accent);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.console-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.console-entry-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.console-entry-time {
+  font-weight: 500;
+}
+
+.console-entry-source {
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.7rem;
+}
+
+.console-entry-level {
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.console-entry-description {
+  font-size: 0.85rem;
+  white-space: pre-line;
+}
+
+.console-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.console-tag {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #4b5563;
+}
+
+.console-entry.level-error {
+  border-left-color: var(--danger);
+}
+
+.console-entry.level-warn {
+  border-left-color: var(--warning);
+}
+
+.console-entry.level-debug {
+  border-left-color: #6366f1;
+}
+
 @media (max-width: 768px) {
   .app-shell {
     padding: 20px 16px 32px;

@@ -26,6 +26,9 @@ const els = {
   durationSlider: document.getElementById("durationSlider"),
   speedValue: document.getElementById("speedValue"),
   durationValue: document.getElementById("durationValue"),
+  consoleBody: document.getElementById("robotConsole"),
+  consoleReload: document.getElementById("consoleReload"),
+  consoleAutoScroll: document.getElementById("consoleAutoScroll"),
 };
 
 const STORAGE_KEY = "petFollowerDashboard";
@@ -35,6 +38,7 @@ let config = {
 let pollTimer = null;
 let eventSource = null;
 let resolvedBaseUrl = "";
+const LOCAL_JSONL_PATH = "assets/pet_log.jsonl";
 
 function loadConfig() {
   try {
@@ -290,12 +294,127 @@ function setupConfigButtons() {
   els.refreshBtn.addEventListener("click", () => fetchStatus(true));
 }
 
+function setupConsole() {
+  if (!els.consoleBody) return;
+  if (els.consoleReload) {
+    els.consoleReload.addEventListener("click", () => {
+      loadLocalConsoleLog();
+    });
+  }
+  loadLocalConsoleLog();
+}
+
+async function loadLocalConsoleLog() {
+  if (!els.consoleBody) return;
+  try {
+    const resp = await fetch(LOCAL_JSONL_PATH, { cache: "no-store" });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const text = await resp.text();
+    const lines = text.split(/\r?\n/).filter((line) => line.trim().length > 0);
+
+    const entries = [];
+    for (const line of lines) {
+      try {
+        entries.push(JSON.parse(line));
+      } catch (err) {
+        entries.push({
+          ts: "",
+          level: "error",
+          source: "console",
+          msg: "Invalid JSONL line",
+          extra: { line },
+        });
+      }
+    }
+    renderConsoleLog(entries);
+  } catch (err) {
+    renderConsoleLog([
+      {
+        ts: "",
+        level: "error",
+        source: "console",
+        msg: `Failed to load pet_log.jsonl: ${err.message}`,
+      },
+    ]);
+  }
+}
+
+function renderConsoleLog(entries) {
+  const container = els.consoleBody;
+  if (!container) return;
+  container.innerHTML = "";
+
+  entries.forEach((entry) => {
+    const level = (entry.level || "info").toLowerCase();
+    const card = document.createElement("div");
+    card.className = `console-entry level-${level}`;
+
+    const ts = entry.ts || entry.time || "";
+    const source = entry.source || entry.component || (entry.extra && entry.extra.source) || "";
+    const description = entry.description || entry.msg || entry.message || "";
+    const extra = entry.extra && typeof entry.extra === "object" ? entry.extra : null;
+
+    const header = document.createElement("div");
+    header.className = "console-entry-header";
+
+    const meta = document.createElement("div");
+    meta.className = "console-entry-meta";
+
+    if (ts) {
+      const timeEl = document.createElement("span");
+      timeEl.className = "console-entry-time";
+      timeEl.textContent = ts;
+      meta.appendChild(timeEl);
+    }
+
+    if (source) {
+      const sourceEl = document.createElement("span");
+      sourceEl.className = "console-entry-source";
+      sourceEl.textContent = source;
+      meta.appendChild(sourceEl);
+    }
+
+    const levelEl = document.createElement("span");
+    levelEl.className = "console-entry-level";
+    levelEl.textContent = level;
+
+    header.appendChild(meta);
+    header.appendChild(levelEl);
+
+    const descEl = document.createElement("div");
+    descEl.className = "console-entry-description";
+    descEl.textContent = description;
+
+    card.appendChild(header);
+    card.appendChild(descEl);
+
+    if (extra && Object.keys(extra).length > 0) {
+      const tags = document.createElement("div");
+      tags.className = "console-tags";
+      Object.entries(extra).forEach(([key, value]) => {
+        const tag = document.createElement("span");
+        tag.className = "console-tag";
+        tag.textContent = `${key}: ${value}`;
+        tags.appendChild(tag);
+      });
+      card.appendChild(tags);
+    }
+
+    container.appendChild(card);
+  });
+
+  if (els.consoleAutoScroll && els.consoleAutoScroll.checked) {
+    container.scrollTop = container.scrollHeight;
+  }
+}
+
 function init() {
   loadConfig();
   setupButtons();
   setupSliders();
   setupLogControls();
   setupConfigButtons();
+  setupConsole();
   if (resolvedBaseUrl) {
     connectStreams();
   } else {
