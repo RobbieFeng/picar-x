@@ -3,7 +3,7 @@ import io
 import requests
 import cv2
 
-SERVER_IP = "192.168.1.246"  # 换成你电脑的 IP
+SERVER_IP = "34.61.99.220"  # Google VM instance
 SERVER_URL = f"http://{SERVER_IP}:5000/api/upload-image"
 
 def send_frame_bgr(frame):

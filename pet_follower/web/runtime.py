@@ -292,7 +292,7 @@ class PetFollowerRuntime:
                         elif holding_last:
                             self._log("Holding last heading, continuing search")
                     else:
-                        self._log("No detection; running search pattern", verbose=True)
+                        self._log("No detection - Searching", verbose=True)
                         if not self._motion.search():
                             self._motion.turn90(1)
                             self._motion.reset_target_time()

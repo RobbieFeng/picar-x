@@ -35,30 +35,6 @@ let config = {
 let pollTimer = null;
 let eventSource = null;
 let resolvedBaseUrl = "";
-const LEGACY_MESSAGE_MAP = {
-  "未检测到宠物，执行搜索模式": "No target; searching",
-  "执行强制搜索": "Executing forced search",
-  "安全检查限制移动": "Stop by safety check",
-  "检测到宠物，正在跟随": "Target acquired; following",
-  "保持最后方向，继续搜索": "Holding last heading, continuing search",
-  "正在进入跟随模式": "Entering follow mode",
-  "已启动宠物跟随": "Following started",
-  "已停止": "Stopped",
-  "宠物跟随已停止": "Following stopped",
-  "状态已重置": "State reset",
-  "触发庆祝动作": "Celebration requested",
-  "庆祝动作已触发": "Celebration triggered",
-  "已请求搜索动作": "Search command queued",
-  "搜索动作已触发": "Search triggered",
-  "当前无法获取画面": "Unable to capture frame",
-  "已上传单帧到云端": "Snapshot uploaded to cloud",
-  "快照已发送": "Snapshot sent",
-  "当前处于自动模式，请先停止跟随": "Follower is active; stop it before manual drive",
-  "未知方向，允许 forward/backward/left/right/stop":
-    "Unknown direction; allowed forward/backward/left/right/stop",
-  "手动驾驶 完成": "Manual drive complete",
-  "事件已记录": "Event recorded",
-};
 
 function loadConfig() {
   try {
@@ -140,7 +116,7 @@ function updateStatusUI(payload = {}) {
     : "-";
   const distance = detection.approx_distance_cm ?? payload.distance_cm;
   els.distanceLabel.textContent = distance ? `${distance.toFixed(1)} cm` : "-";
-  els.targetStatus.textContent = translateLegacyText(payload.message || payload.note || "");
+  els.targetStatus.textContent = payload.message || payload.note || "";
 
   els.statusList.targetVisible.textContent = visible ? "Yes" : "No";
   els.statusList.lastTargetTime.textContent = formatRelativeTime(
@@ -154,7 +130,7 @@ function updateStatusUI(payload = {}) {
   const fps = payload.fps ?? payload.camera_fps;
   els.statusList.fpsLabel.textContent = fps ? fps.toFixed(1) : "-";
   const msg = payload.last_log || payload.message || "-";
-  els.statusList.lastMessage.textContent = translateLegacyText(msg);
+  els.statusList.lastMessage.textContent = msg;
 
   if (motion.safe_to_move === false) {
     els.stateOverlay.dataset.blocked = "true";
@@ -239,13 +215,12 @@ function setupSliders() {
 }
 
 function logEvent(level, text) {
-  const translated = translateLegacyText(text);
   const li = document.createElement("li");
   const time = document.createElement("time");
   time.dateTime = new Date().toISOString();
   time.textContent = new Date().toLocaleTimeString();
   const span = document.createElement("span");
-  span.textContent = `[${level}] ${translated}`;
+  span.textContent = `[${level}] ${text}`;
   if (level === "error") {
     span.style.color = "var(--danger)";
   } else if (level === "warn") {
@@ -351,17 +326,4 @@ function normalizeBaseUrl(input) {
     logEvent("warn", `Invalid address: ${input}`);
     return "";
   }
-}
-
-function translateLegacyText(text) {
-  if (!text) return text;
-  const trimmed = text.trim();
-  if (trimmed.startsWith("手动驾驶")) {
-    const direction = trimmed.replace("手动驾驶", "").trim();
-    return direction ? `Manual drive ${direction}` : "Manual drive";
-  }
-  if (trimmed.startsWith("事件：")) {
-    return `Event: ${trimmed.replace("事件：", "").trim()}`;
-  }
-  return LEGACY_MESSAGE_MAP[trimmed] || trimmed;
 }
