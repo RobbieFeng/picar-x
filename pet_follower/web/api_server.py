@@ -5,16 +5,12 @@ import asyncio
 import json
 from typing import Any, Dict
 
-import httpx
 from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
 from pet_follower.log import logger
 from pet_follower.web.runtime import CameraManager, EventBus, PetFollowerRuntime
-
-# GCP server configuration for activity logs
-GCP_SERVER_URL = "http://34.61.99.220:5000"  # Cloud server that stores pet activity logs
 
 app = FastAPI(title="Pet Follower Controller", version="1.0.0")
 app.add_middleware(
@@ -58,6 +54,12 @@ def api_commands(payload: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
             message = runtime.force_search()
         elif action == "capture_frame":
             message = runtime.capture_snapshot()
+        elif action == "record_video":
+            message = runtime.record_video(payload.get("duration", 10.0))
+        elif action == "auto_recording":
+            message = runtime.configure_auto_recording(
+                enabled=payload.get("enabled"), interval=payload.get("interval")
+            )
         elif action == "manual_drive":
             message = runtime.manual_drive(
                 payload.get("direction", ""), payload.get("speed", 40), payload.get("duration", 0.8)
@@ -95,65 +97,6 @@ async def sse_events() -> StreamingResponse:
             events.unregister(queue)
 
     return StreamingResponse(event_generator(), media_type="text/event-stream")
-
-
-@app.get("/api/gcp-log")
-async def api_gcp_log() -> Dict[str, Any]:
-    """Proxy endpoint to fetch the latest pet log from the GCP server.
-
-    The GCP server exposes `/api/today-log-path`, which returns JSON:
-      {
-        "status": "ok",
-        "log_path": "logs/pet_log_YYYY-MM-DD.jsonl",
-        "content": "<jsonl text>",
-      }
-
-    This endpoint forwards that response and also parses the JSONL content
-    into structured entries for the dashboard UI.
-    """
-    try:
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            resp = await client.get(f"{GCP_SERVER_URL}/api/today-log-path")
-            if resp.status_code != 200:
-                logger.warning("GCP log request failed: HTTP %s", resp.status_code)
-                return {
-                    "status": "error",
-                    "error": f"HTTP {resp.status_code}",
-                }
-
-            data = resp.json()
-            log_content = data.get("content", "") or ""
-            log_path = data.get("log_path", "") or ""
-
-            # Parse JSONL into individual entries
-            entries = []
-            if log_content:
-                lines = [line.strip() for line in log_content.split("\n") if line.strip()]
-                for line in lines:
-                    try:
-                        entries.append(json.loads(line))
-                    except json.JSONDecodeError:
-                        # Skip invalid lines but keep going
-                        logger.debug("Skipping invalid JSONL line from GCP log")
-
-            return {
-                "status": "ok",
-                "log_path": log_path,
-                "entries": entries,
-                "content": log_content,
-            }
-    except httpx.TimeoutException:
-        logger.warning("Timeout connecting to GCP log server at %s", GCP_SERVER_URL)
-        return {
-            "status": "error",
-            "error": "Timeout connecting to GCP server",
-        }
-    except Exception as exc:  # pragma: no cover - safety
-        logger.warning("Error fetching GCP log: %s", exc)
-        return {
-            "status": "error",
-            "error": str(exc),
-        }
 
 
 if __name__ == "__main__":
