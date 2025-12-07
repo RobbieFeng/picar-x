@@ -5,3 +5,4 @@ bk/
 __pycache__
 .gitignore
 *.pt
+*.log
