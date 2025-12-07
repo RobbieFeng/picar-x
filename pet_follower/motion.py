@@ -5,7 +5,7 @@ import time
 from dataclasses import dataclass
 from typing import Callable, Optional
 
-from picarx import Picarx
+from pet_follower.picarx import Picarx
 
 from .config import config
 from .log import logger
