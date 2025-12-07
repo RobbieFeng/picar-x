@@ -3,12 +3,13 @@ from __future__ import annotations
 
 import asyncio
 import json
+import math
 import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Deque, Dict, Iterable, List, Optional
+from typing import Any, Deque, Dict, Iterable, List, Optional, Tuple
 import tempfile
 
 import cv2
@@ -20,6 +21,9 @@ from pet_follower.vision import CameraStream, DetectionResult, DogDetector
 from pet_follower.utils.cloud_client import send_frame_bgr, send_video_file
 
 LOOP_DELAY = 0.02
+SMART_SNAPSHOT_STILLNESS_SEC = 10.0
+SMART_SNAPSHOT_TOLERANCE_PX = 30.0
+SMART_SNAPSHOT_COOLDOWN_SEC = 300.0
 
 
 class EventBus:
@@ -134,6 +138,7 @@ class RuntimeState:
     fps: float = 0.0
     last_log: str = ""
     auto_recording: Dict[str, Any] = field(default_factory=dict)
+    smart_snapshot: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -146,6 +151,7 @@ class RuntimeState:
             "fps": self.fps,
             "last_log": self.last_log,
             "auto_recording": self.auto_recording,
+            "smart_snapshot": self.smart_snapshot,
         }
 
 
@@ -174,6 +180,11 @@ class PetFollowerRuntime:
         self._auto_record_duration = 2.0 # control the length of recording
         self._last_auto_record = 0.0
         self._last_auto_record_wall = 0.0
+        self._stillness_last_center: Optional[Tuple[float, float]] = None
+        self._stillness_last_motion = 0.0
+        self._smart_snapshot_last_capture = 0.0
+        self._smart_snapshot_last_wall = 0.0
+        self._last_log_message: Optional[str] = None
 
     # ------------------------------------------------------------------
     # Public API
@@ -310,6 +321,7 @@ class PetFollowerRuntime:
                     self._fps_samples.append(1.0 / elapsed)
 
                 detection = self._detector.detect_dog(frame)
+                self._handle_smart_snapshot(frame, detection)
                 active_detection, holding_last = self._resolve_detection(detection)
                 target_visible = detection is not None
                 safe_to_move = self._motion.update_safety()
@@ -380,6 +392,7 @@ class PetFollowerRuntime:
             target_visible=target_visible,
             fps=round(fps, 2),
             auto_recording=self._auto_record_state(),
+            smart_snapshot=self._smart_snapshot_state(),
         )
 
     def _serialize_detection(self, detection: Optional[DetectionResult]) -> Optional[Dict[str, Any]]:
@@ -394,6 +407,10 @@ class PetFollowerRuntime:
         }
 
     def _log(self, message: str, *, level: str = "info", verbose: bool = False) -> None:
+        duplicate = level == "info" and message == self._last_log_message
+        if duplicate:
+            return
+        self._last_log_message = message
         if verbose:
             logger.debug(message)
         else:
@@ -420,6 +437,28 @@ class PetFollowerRuntime:
             "seconds_since_last": since_last,
         }
 
+    def _smart_snapshot_state(self) -> Dict[str, Any]:
+        now = time.monotonic()
+        if self._smart_snapshot_last_capture == 0.0:
+            elapsed = float("inf")
+        else:
+            elapsed = now - self._smart_snapshot_last_capture
+        eligible = elapsed == float("inf") or elapsed >= SMART_SNAPSHOT_COOLDOWN_SEC
+        seconds_until = 0.0 if eligible else max(0.0, SMART_SNAPSHOT_COOLDOWN_SEC - elapsed)
+        since_last = (
+            (time.time() - self._smart_snapshot_last_wall)
+            if self._smart_snapshot_last_wall
+            else None
+        )
+        return {
+            "eligible": eligible,
+            "seconds_until_next": seconds_until,
+            "cooldown_seconds": SMART_SNAPSHOT_COOLDOWN_SEC,
+            "last_uploaded_at": self._smart_snapshot_last_wall or None,
+            "stillness_required": SMART_SNAPSHOT_STILLNESS_SEC,
+            "tolerance_px": SMART_SNAPSHOT_TOLERANCE_PX,
+        }
+
     def _handle_auto_recording(self, target_visible: bool) -> None:
         if not self._auto_record_enabled or not target_visible:
             return
@@ -431,6 +470,57 @@ class PetFollowerRuntime:
         if elapsed >= self._auto_record_interval:
             self._start_background_recording()
             self._update_state(auto_recording=self._auto_record_state())
+
+    def _handle_smart_snapshot(self, frame, detection: Optional[DetectionResult]) -> None:
+        now = time.monotonic()
+        if detection is None:
+            self._stillness_last_center = None
+            self._stillness_last_motion = 0.0
+            return
+        center = detection.center
+        if not center:
+            return
+        if self._stillness_last_center is None:
+            self._stillness_last_center = center
+            self._stillness_last_motion = now
+            return
+        movement = math.hypot(
+            center[0] - self._stillness_last_center[0],
+            center[1] - self._stillness_last_center[1],
+        )
+        self._stillness_last_center = center
+        still_for = now - self._stillness_last_motion if self._stillness_last_motion else 0.0
+        logger.info(
+            "Smart snapshot movement=%.2f still=%.2f target=(%.1f, %.1f)",
+            movement,
+            still_for,
+            center[0],
+            center[1],
+        )
+        if movement > SMART_SNAPSHOT_TOLERANCE_PX:
+            self._stillness_last_motion = now
+            return
+        if self._stillness_last_motion == 0.0:
+            self._stillness_last_motion = now
+            return
+        if still_for < SMART_SNAPSHOT_STILLNESS_SEC:
+            return
+        last_capture = self._smart_snapshot_last_capture
+        if last_capture and (now - last_capture) < SMART_SNAPSHOT_COOLDOWN_SEC:
+            return
+        frame_copy = frame.copy()
+        try:
+            send_frame_bgr(frame_copy)
+        except Exception as exc:
+            logger.warning("Smart snapshot failed: %s", exc)
+            self._update_state(message=f"Smart snapshot failed: {exc}")
+        else:
+            self._smart_snapshot_last_capture = now
+            self._smart_snapshot_last_wall = time.time()
+            self._log("Smart snapshot uploaded - pet resting")
+            self._update_state(smart_snapshot=self._smart_snapshot_state())
+        finally:
+            self._stillness_last_motion = now
 
     def _start_background_recording(self) -> None:
         def worker() -> None:
@@ -507,6 +597,7 @@ class PetFollowerRuntime:
         fps: Optional[float] = None,
         last_log: Optional[str] = None,
         auto_recording: Optional[Dict[str, Any]] = None,
+        smart_snapshot: Optional[Dict[str, Any]] = None,
     ) -> None:
         with self._state_lock:
             if mode is not None:
@@ -527,5 +618,7 @@ class PetFollowerRuntime:
                 self._state.last_log = last_log
             if auto_recording is not None:
                 self._state.auto_recording = auto_recording
+            if smart_snapshot is not None:
+                self._state.smart_snapshot = smart_snapshot
             snapshot = self._state.to_dict()
         self._events.emit({"type": "status", "data": snapshot})
