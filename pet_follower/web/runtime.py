@@ -7,9 +7,7 @@ import threading
 import time
 from collections import deque
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Any, Deque, Dict, Iterable, List, Optional
-import tempfile
 
 import cv2
 
@@ -17,7 +15,7 @@ from pet_follower.interaction import InteractionManager
 from pet_follower.log import logger
 from pet_follower.motion import MotionController
 from pet_follower.vision import CameraStream, DetectionResult, DogDetector
-from pet_follower.utils.cloud_client import send_frame_bgr, send_video_file
+from pet_follower.utils.cloud_client import send_frame_bgr
 
 LOOP_DELAY = 0.02
 
@@ -133,7 +131,6 @@ class RuntimeState:
     motion: Dict[str, Any] = field(default_factory=dict)
     fps: float = 0.0
     last_log: str = ""
-    auto_recording: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -145,7 +142,6 @@ class RuntimeState:
             "motion": self.motion,
             "fps": self.fps,
             "last_log": self.last_log,
-            "auto_recording": self.auto_recording,
         }
 
 
@@ -167,13 +163,6 @@ class PetFollowerRuntime:
         self._last_detection_time = 0.0
         self._target_visible = False
         self._force_search = threading.Event()
-        self._recording_lock = threading.Lock()
-        self._auto_record_thread: Optional[threading.Thread] = None
-        self._auto_record_enabled = False
-        self._auto_record_interval = 180.0
-        self._auto_record_duration = 2.0 # control the length of recording
-        self._last_auto_record = 0.0
-        self._last_auto_record_wall = 0.0
 
     # ------------------------------------------------------------------
     # Public API
@@ -228,18 +217,6 @@ class PetFollowerRuntime:
         self._update_state(message="Snapshot uploaded to cloud")
         return "Snapshot sent"
 
-    def record_video(self, duration: float = 10.0, fps: int = 15) -> str:
-        duration = max(1.0, min(float(duration), 60.0))
-        fps = max(5, min(int(fps), 30))
-        if not self._recording_lock.acquire(blocking=False):
-            raise RuntimeError("Video recording already running")
-        try:
-            self._update_state(auto_recording=self._auto_record_state())
-            return self._capture_and_upload_video(duration, fps, auto=False)
-        finally:
-            self._recording_lock.release()
-            self._update_state(auto_recording=self._auto_record_state())
-
     def manual_drive(self, direction: str, speed: int, duration: float) -> str:
         if self._thread and self._thread.is_alive():
             raise RuntimeError("Follower is active; stop it before manual drive")
@@ -275,21 +252,6 @@ class PetFollowerRuntime:
         logger.info("Mark event: %s", msg)
         self._update_state(message=f"Event: {msg}")
         return "Event recorded"
-
-    def configure_auto_recording(
-        self, *, enabled: Optional[bool] = None, interval: Optional[float] = None
-    ) -> str:
-        if enabled is not None:
-            self._auto_record_enabled = bool(enabled)
-            self._last_auto_record = 0.0
-        if interval is not None:
-            interval = max(30.0, min(float(interval), 900.0))
-            self._auto_record_interval = interval
-        self._update_state(
-            message="Auto recording updated",
-            auto_recording=self._auto_record_state(),
-        )
-        return "Auto recording settings updated"
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -335,7 +297,6 @@ class PetFollowerRuntime:
                             self._motion.turn90(1)
                             self._motion.reset_target_time()
 
-                self._handle_auto_recording(target_visible)
                 self._publish_state(active_detection, target_visible, safe_to_move)
                 time.sleep(LOOP_DELAY)
         except Exception as exc:  # pragma: no cover - safety
@@ -379,7 +340,6 @@ class PetFollowerRuntime:
             motion=motion,
             target_visible=target_visible,
             fps=round(fps, 2),
-            auto_recording=self._auto_record_state(),
         )
 
     def _serialize_detection(self, detection: Optional[DetectionResult]) -> Optional[Dict[str, Any]]:
@@ -401,100 +361,6 @@ class PetFollowerRuntime:
         self._update_state(message=message, last_log=message)
         self._events.emit({"type": "log", "level": level, "message": message})
 
-    def _auto_record_state(self) -> Dict[str, Any]:
-        now = time.monotonic()
-        elapsed = now - self._last_auto_record if self._last_auto_record > 0 else float("inf")
-        remaining = max(0.0, self._auto_record_interval - elapsed) if elapsed != float("inf") else 0.0
-        eligible = elapsed >= self._auto_record_interval or self._last_auto_record == 0.0
-        last_wall = self._last_auto_record_wall or None
-        since_last = (
-            (time.time() - self._last_auto_record_wall) if self._last_auto_record_wall else None
-        )
-        return {
-            "enabled": self._auto_record_enabled,
-            "interval": self._auto_record_interval,
-            "seconds_until_next": 0.0 if eligible else remaining,
-            "eligible": eligible,
-            "active": self._recording_lock.locked(),
-            "last_uploaded_at": last_wall,
-            "seconds_since_last": since_last,
-        }
-
-    def _handle_auto_recording(self, target_visible: bool) -> None:
-        if not self._auto_record_enabled or not target_visible:
-            return
-        if self._recording_lock.locked():
-            return
-        now = time.monotonic()
-        last = self._last_auto_record if self._last_auto_record > 0 else 0.0
-        elapsed = now - last if last > 0 else float("inf")
-        if elapsed >= self._auto_record_interval:
-            self._start_background_recording()
-            self._update_state(auto_recording=self._auto_record_state())
-
-    def _start_background_recording(self) -> None:
-        def worker() -> None:
-            if not self._recording_lock.acquire(blocking=False):
-                return
-            try:
-                self._update_state(auto_recording=self._auto_record_state())
-                self._capture_and_upload_video(self._auto_record_duration, 15, auto=True)
-            except Exception as exc:
-                logger.warning("Auto video failed: %s", exc)
-                self._update_state(message=f"Auto video failed: {exc}")
-            finally:
-                self._recording_lock.release()
-                self._auto_record_thread = None
-                self._update_state(auto_recording=self._auto_record_state())
-
-        self._auto_record_thread = threading.Thread(target=worker, name="auto-video", daemon=True)
-        self._auto_record_thread.start()
-
-    def _capture_and_upload_video(self, duration: float, fps: int, *, auto: bool) -> str:
-        self._camera.start()
-        video_path = Path(tempfile.gettempdir()) / f"pet_follower_{int(time.time())}.mp4"
-        writer: Optional[cv2.VideoWriter] = None
-        frames_written = 0
-        start = time.monotonic()
-        target = start
-        try:
-            while time.monotonic() - start < duration:
-                frame = self._camera.get_frame(wait=True, timeout=1.0, copy_frame=True)
-                if frame is None:
-                    continue
-                if writer is None:
-                    height, width = frame.shape[:2]
-                    fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-                    writer = cv2.VideoWriter(str(video_path), fourcc, fps, (width, height))
-                    if not writer.isOpened():
-                        writer.release()
-                        writer = None
-                        raise RuntimeError("Unable to open video writer")
-                writer.write(frame)
-                frames_written += 1
-                target += 1.0 / fps
-                sleep_for = target - time.monotonic()
-                if sleep_for > 0:
-                    time.sleep(sleep_for)
-            if writer is None or frames_written == 0:
-                raise RuntimeError("Video recording captured no frames")
-        finally:
-            if writer is not None:
-                writer.release()
-        try:
-            send_video_file(video_path)
-            label = "Auto video uploaded" if auto else "Video uploaded"
-            if auto:
-                self._last_auto_record = time.monotonic()
-                self._last_auto_record_wall = time.time()
-            self._update_state(message=label, auto_recording=self._auto_record_state())
-            return "Automatic video uploaded" if auto else "Video clip recorded and uploaded"
-        finally:
-            try:
-                video_path.unlink(missing_ok=True)
-            except Exception:
-                pass
-
     def _update_state(
         self,
         *,
@@ -506,7 +372,6 @@ class PetFollowerRuntime:
         motion: Optional[Dict[str, Any]] = None,
         fps: Optional[float] = None,
         last_log: Optional[str] = None,
-        auto_recording: Optional[Dict[str, Any]] = None,
     ) -> None:
         with self._state_lock:
             if mode is not None:
@@ -525,7 +390,5 @@ class PetFollowerRuntime:
                 self._state.fps = fps
             if last_log is not None:
                 self._state.last_log = last_log
-            if auto_recording is not None:
-                self._state.auto_recording = auto_recording
             snapshot = self._state.to_dict()
         self._events.emit({"type": "status", "data": snapshot})
