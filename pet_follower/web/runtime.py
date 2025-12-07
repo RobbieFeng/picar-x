@@ -24,6 +24,8 @@ LOOP_DELAY = 0.02
 SMART_SNAPSHOT_STILLNESS_SEC = 10.0
 SMART_SNAPSHOT_TOLERANCE_PX = 30.0
 SMART_SNAPSHOT_COOLDOWN_SEC = 300.0
+SUDDEN_MOVE_DISTANCE_PX = 60.0
+SUDDEN_MOVE_COOLDOWN_SEC = 60.0
 
 
 class EventBus:
@@ -139,6 +141,7 @@ class RuntimeState:
     last_log: str = ""
     auto_recording: Dict[str, Any] = field(default_factory=dict)
     smart_snapshot: Dict[str, Any] = field(default_factory=dict)
+    movement_recording: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -152,6 +155,7 @@ class RuntimeState:
             "last_log": self.last_log,
             "auto_recording": self.auto_recording,
             "smart_snapshot": self.smart_snapshot,
+            "movement_recording": self.movement_recording,
         }
 
 
@@ -182,8 +186,12 @@ class PetFollowerRuntime:
         self._last_auto_record_wall = 0.0
         self._stillness_last_center: Optional[Tuple[float, float]] = None
         self._stillness_last_motion = 0.0
+        self._stillness_last_center_time = 0.0
         self._smart_snapshot_last_capture = 0.0
         self._smart_snapshot_last_wall = 0.0
+        self._movement_record_last_trigger = 0.0
+        self._movement_record_last_wall = 0.0
+        self._movement_record_active = False
         self._last_log_message: Optional[str] = None
 
     # ------------------------------------------------------------------
@@ -333,7 +341,11 @@ class PetFollowerRuntime:
                     self._log("Executing forced search")
 
                 if not safe_to_move:
-                    self._log("Movement blocked by safety check", level="warning")
+                    self._log(
+                        "Movement blocked by safety check",
+                        level="warning",
+                        emit_event=False,
+                    )
                 else:
                     if active_detection is not None:
                         self._motion.track_target(active_detection)
@@ -393,6 +405,7 @@ class PetFollowerRuntime:
             fps=round(fps, 2),
             auto_recording=self._auto_record_state(),
             smart_snapshot=self._smart_snapshot_state(),
+            movement_recording=self._movement_record_state(),
         )
 
     def _serialize_detection(self, detection: Optional[DetectionResult]) -> Optional[Dict[str, Any]]:
@@ -406,7 +419,14 @@ class PetFollowerRuntime:
             "updated_at": time.time(),
         }
 
-    def _log(self, message: str, *, level: str = "info", verbose: bool = False) -> None:
+    def _log(
+        self,
+        message: str,
+        *,
+        level: str = "info",
+        verbose: bool = False,
+        emit_event: bool = True,
+    ) -> None:
         duplicate = level == "info" and message == self._last_log_message
         if duplicate:
             return
@@ -416,7 +436,8 @@ class PetFollowerRuntime:
         else:
             getattr(logger, level, logger.info)(message)
         self._update_state(message=message, last_log=message)
-        self._events.emit({"type": "log", "level": level, "message": message})
+        if emit_event:
+            self._events.emit({"type": "log", "level": level, "message": message})
 
     def _auto_record_state(self) -> Dict[str, Any]:
         now = time.monotonic()
@@ -459,6 +480,28 @@ class PetFollowerRuntime:
             "tolerance_px": SMART_SNAPSHOT_TOLERANCE_PX,
         }
 
+    def _movement_record_state(self) -> Dict[str, Any]:
+        now = time.monotonic()
+        if self._movement_record_last_trigger == 0.0:
+            elapsed = float("inf")
+        else:
+            elapsed = now - self._movement_record_last_trigger
+        eligible = elapsed == float("inf") or elapsed >= SUDDEN_MOVE_COOLDOWN_SEC
+        seconds_until = 0.0 if eligible else max(0.0, SUDDEN_MOVE_COOLDOWN_SEC - elapsed)
+        since_last = (
+            (time.time() - self._movement_record_last_wall)
+            if self._movement_record_last_wall
+            else None
+        )
+        return {
+            "cooldown": SUDDEN_MOVE_COOLDOWN_SEC,
+            "eligible": eligible,
+            "seconds_until_next": seconds_until,
+            "last_triggered_at": self._movement_record_last_wall or None,
+            "seconds_since_last": since_last,
+            "active": self._movement_record_active,
+        }
+
     def _handle_auto_recording(self, target_visible: bool) -> None:
         if not self._auto_record_enabled or not target_visible:
             return
@@ -476,6 +519,7 @@ class PetFollowerRuntime:
         if detection is None:
             self._stillness_last_center = None
             self._stillness_last_motion = 0.0
+            self._stillness_last_center_time = 0.0
             return
         center = detection.center
         if not center:
@@ -483,20 +527,37 @@ class PetFollowerRuntime:
         if self._stillness_last_center is None:
             self._stillness_last_center = center
             self._stillness_last_motion = now
+            self._stillness_last_center_time = now
             return
-        movement = math.hypot(
-            center[0] - self._stillness_last_center[0],
-            center[1] - self._stillness_last_center[1],
-        )
+        last_center_time = self._stillness_last_center_time or now
+        prev_center = self._stillness_last_center
+        movement_dx = center[0] - prev_center[0]
+        movement_dy = center[1] - prev_center[1]
+        movement = math.hypot(movement_dx, movement_dy)
         self._stillness_last_center = center
+        self._stillness_last_center_time = now
         still_for = now - self._stillness_last_motion if self._stillness_last_motion else 0.0
         logger.info(
-            "Smart snapshot movement=%.2f still=%.2f target=(%.1f, %.1f)",
+            "Smart snapshot movement=%.2f (dx=%.1f, dy=%.1f) still=%.2f target=(%.1f, %.1f)",
             movement,
+            movement_dx,
+            movement_dy,
             still_for,
             center[0],
             center[1],
         )
+        elapsed_since_center = max(1e-6, now - last_center_time)
+        speed_px = movement / elapsed_since_center
+        movement_ready = (
+            self._movement_record_last_trigger == 0.0
+            or (now - self._movement_record_last_trigger) >= SUDDEN_MOVE_COOLDOWN_SEC
+        )
+        if (
+            still_for >= SMART_SNAPSHOT_STILLNESS_SEC
+            and movement >= SUDDEN_MOVE_DISTANCE_PX
+            and movement_ready
+        ):
+            self._trigger_movement_recording(still_for, movement, speed_px)
         if movement > SMART_SNAPSHOT_TOLERANCE_PX:
             self._stillness_last_motion = now
             return
@@ -521,6 +582,43 @@ class PetFollowerRuntime:
             self._update_state(smart_snapshot=self._smart_snapshot_state())
         finally:
             self._stillness_last_motion = now
+
+    def _trigger_movement_recording(self, still_for: float, movement: float, speed_px: float) -> None:
+        if self._recording_lock.locked() or self._movement_record_active:
+            return
+
+        def worker() -> None:
+            if not self._recording_lock.acquire(blocking=False):
+                self._movement_record_active = False
+                return
+            self._movement_record_active = True
+            self._movement_record_last_trigger = time.monotonic()
+            self._movement_record_last_wall = time.time()
+            self._update_state(movement_recording=self._movement_record_state())
+            start_msg = (
+                f"Motion-triggered recording (Δ {movement:.0f}px, rest {still_for:.0f}s, "
+                f"speed {speed_px:.1f}px/s)"
+            )
+            self._log(start_msg)
+            try:
+                self._capture_and_upload_video(self._auto_record_duration, 15, auto=False)
+                self._update_state(
+                    message="Motion-triggered video uploaded",
+                    movement_recording=self._movement_record_state(),
+                )
+            except Exception as exc:
+                logger.warning("Motion-triggered video failed: %s", exc)
+                self._update_state(
+                    message=f"Motion video failed: {exc}",
+                    movement_recording=self._movement_record_state(),
+                )
+            finally:
+                self._movement_record_active = False
+                self._update_state(movement_recording=self._movement_record_state())
+                self._recording_lock.release()
+
+        self._movement_record_active = True
+        threading.Thread(target=worker, name="motion-video", daemon=True).start()
 
     def _start_background_recording(self) -> None:
         def worker() -> None:
@@ -598,6 +696,7 @@ class PetFollowerRuntime:
         last_log: Optional[str] = None,
         auto_recording: Optional[Dict[str, Any]] = None,
         smart_snapshot: Optional[Dict[str, Any]] = None,
+        movement_recording: Optional[Dict[str, Any]] = None,
     ) -> None:
         with self._state_lock:
             if mode is not None:
@@ -620,5 +719,7 @@ class PetFollowerRuntime:
                 self._state.auto_recording = auto_recording
             if smart_snapshot is not None:
                 self._state.smart_snapshot = smart_snapshot
+            if movement_recording is not None:
+                self._state.movement_recording = movement_recording
             snapshot = self._state.to_dict()
         self._events.emit({"type": "status", "data": snapshot})

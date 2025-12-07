@@ -53,14 +53,52 @@ mock_state = {
     "distance_cm": 120.5,
     "obstacle_distance": 45.0,
     "last_detection": time.time() - 2,
+    "smart_snapshot": {
+        "eligible": True,
+        "seconds_until_next": 0.0,
+        "cooldown_seconds": 300,
+        "last_uploaded_at": None,
+        "stillness_required": 15.0,
+        "tolerance_px": 25.0,
+    },
+    "movement_recording": {
+        "cooldown": 180,
+        "eligible": True,
+        "seconds_until_next": 0.0,
+        "last_triggered_at": None,
+        "seconds_since_last": None,
+        "active": False,
+    },
+}
+
+
+mock_emotion_report = {
+    "mood": "Playful",
+    "energy": "High",
+    "advice": "Schedule a quick play session",
+    "headline": "Buddy is feeling adventurous",
+    "details": "Recent uploads show lots of tail-wagging and curious glances. Keep the fun going!",
+    "indicator": "happy",
+    "confidence": 0.86,
+    "updated_at": time.time(),
 }
 
 
 
 
 @app.get("/")
+async def serve_console():
+    """Serve the default console-focused UI."""
+    return FileResponse(BASE_DIR / "console.html")
+
+
+@app.get("/console.html")
+async def serve_console_file():
+    return FileResponse(BASE_DIR / "console.html")
+
+
+@app.get("/dashboard.html")
 async def serve_dashboard():
-    """Serve the main dashboard HTML file."""
     return FileResponse(BASE_DIR / "dashboard.html")
 
 
@@ -197,6 +235,15 @@ async def get_gcp_log():
         return {"status": "error", "error": str(exc)}, 500
 
 
+@app.get("/api/emotion-insight")
+async def get_emotion_insight():
+    mock_emotion_report["updated_at"] = time.time()
+    return {
+        "status": "ok",
+        "analysis": mock_emotion_report,
+    }
+
+
 if __name__ == "__main__":
     import argparse
     import uvicorn
@@ -214,4 +261,3 @@ if __name__ == "__main__":
     print("⚠️  This is a mock server - no actual hardware control\n")
     
     uvicorn.run(app, host=args.host, port=args.port, reload=args.reload)
-
