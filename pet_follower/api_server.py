@@ -10,7 +10,7 @@ from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from pet_follower.log import logger
+from pet_follower.utils.log import logger
 from pet_follower.web.runtime import CameraManager, EventBus, PetFollowerRuntime
 
 # GCP server configuration for activity logs

@@ -1,4 +1,4 @@
 """PetFollower package entry points."""
-from .config import config  # noqa: F401
+from .utils.config import config  # noqa: F401
 
 __all__ = ["config"]
