@@ -162,6 +162,34 @@ async def api_gcp_log() -> Dict[str, Any]:
         }
 
 
+@app.get("/api/emotion-insight")
+async def api_emotion_insight() -> Dict[str, Any]:
+    """Fetch the latest pet emotion analysis from the GCP server."""
+
+    try:
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            resp = await client.get(f"{GCP_SERVER_URL}/api/emotion-insight")
+            if resp.status_code != 200:
+                logger.warning("Emotion insight request failed: HTTP %s", resp.status_code)
+                return {"status": "error", "error": f"HTTP {resp.status_code}"}
+
+            data = resp.json()
+            analysis = (
+                data.get("analysis")
+                or data.get("report")
+                or data.get("result")
+                or data.get("data")
+                or {}
+            )
+            return {"status": "ok", "analysis": analysis, "raw": data}
+    except httpx.TimeoutException:
+        logger.warning("Timeout retrieving emotion insight from %s", GCP_SERVER_URL)
+        return {"status": "error", "error": "Timeout connecting to GCP server"}
+    except Exception as exc:  # pragma: no cover - safety
+        logger.warning("Error fetching emotion insight: %s", exc)
+        return {"status": "error", "error": str(exc)}
+
+
 if __name__ == "__main__":
     import argparse
     import uvicorn

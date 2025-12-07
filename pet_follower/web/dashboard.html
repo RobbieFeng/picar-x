@@ -12,7 +12,10 @@
         <div>
           <h1>MyPet Dashboard</h1>
         </div>
-        <div class="badge" id="connectionBadge">Offline</div>
+        <div class="header-actions">
+          <div class="badge" id="connectionBadge">Offline</div>
+          <a class="nav-button" href="console.html">Robot Console</a>
+        </div>
       </header>
 
       <section class="config-panel">
@@ -163,24 +166,6 @@
         </div>
       </section>
 
-      <section class="console-section">
-        <article class="panel console-panel">
-          <header>
-            <h2>Robot Console</h2>
-            <div class="mini-actions">
-              <span class="console-file-label">
-                Source:
-                <code>GCP Server Log</code>
-              </span>
-              <label class="checkbox inline">
-                <input type="checkbox" id="consoleAutoScroll" checked /> Auto scroll
-              </label>
-              <button class="ghost" id="consoleReload">Reload</button>
-            </div>
-          </header>
-          <div id="robotConsole" class="console-body"></div>
-        </article>
-      </section>
     </div>
     <script src="assets/dashboard.js"></script>
   </body>

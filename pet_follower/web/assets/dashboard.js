@@ -26,9 +26,6 @@ const els = {
   durationSlider: document.getElementById("durationSlider"),
   speedValue: document.getElementById("speedValue"),
   durationValue: document.getElementById("durationValue"),
-  consoleBody: document.getElementById("robotConsole"),
-  consoleReload: document.getElementById("consoleReload"),
-  consoleAutoScroll: document.getElementById("consoleAutoScroll"),
   autoRecordToggle: document.getElementById("autoRecordToggle"),
   autoRecordInterval: document.getElementById("autoRecordInterval"),
   autoRecordIntervalLabel: document.getElementById("autoRecordIntervalLabel"),
@@ -43,9 +40,7 @@ let config = {
 };
 let pollTimer = null;
 let eventSource = null;
-let consolePollTimer = null;
 let resolvedBaseUrl = "";
-const CONSOLE_POLL_INTERVAL = 10000; // 10 seconds
 
 function loadConfig() {
   try {
@@ -374,147 +369,6 @@ function setupConfigButtons() {
   els.refreshBtn.addEventListener("click", () => fetchStatus(true));
 }
 
-function setupConsole() {
-  if (!els.consoleBody) return;
-  if (els.consoleReload) {
-    els.consoleReload.addEventListener("click", () => {
-      loadLocalConsoleLog();
-    });
-  }
-  // Load immediately
-  loadLocalConsoleLog();
-  // Start auto-polling
-  startConsolePolling();
-}
-
-function startConsolePolling() {
-  if (consolePollTimer) clearInterval(consolePollTimer);
-  consolePollTimer = setInterval(() => {
-    loadLocalConsoleLog();
-  }, CONSOLE_POLL_INTERVAL);
-}
-
-async function loadLocalConsoleLog() {
-  if (!els.consoleBody) return;
-  if (!resolvedBaseUrl) {
-    renderConsoleLog([
-      {
-        ts: "",
-        level: "error",
-        source: "console",
-        msg: "API address not configured",
-      },
-    ]);
-    return;
-  }
-  try {
-    const resp = await fetch(`${resolvedBaseUrl}/api/gcp-log`, { cache: "no-store" });
-    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-    const data = await resp.json();
-    
-    if (data.status === "ok") {
-      // Use entries if available, otherwise parse content
-      let entries = data.entries || [];
-      if (!entries.length && data.content) {
-        const lines = data.content.split(/\r?\n/).filter((line) => line.trim().length > 0);
-        for (const line of lines) {
-          try {
-            entries.push(JSON.parse(line));
-          } catch (err) {
-            entries.push({
-              ts: "",
-              level: "error",
-              source: "console",
-              msg: "Invalid JSONL line",
-              extra: { line },
-            });
-          }
-        }
-      }
-      renderConsoleLog(entries);
-    } else {
-      throw new Error(data.error || "Unknown error");
-    }
-  } catch (err) {
-    renderConsoleLog([
-      {
-        ts: "",
-        level: "error",
-        source: "console",
-        msg: `Failed to load log from GCP: ${err.message}`,
-      },
-    ]);
-  }
-}
-
-function renderConsoleLog(entries) {
-  const container = els.consoleBody;
-  if (!container) return;
-  container.innerHTML = "";
-
-  entries.forEach((entry) => {
-    const level = (entry.level || "info").toLowerCase();
-    const card = document.createElement("div");
-    card.className = `console-entry level-${level}`;
-
-    const ts = entry.ts || entry.time || "";
-    const source = entry.source || entry.component || (entry.extra && entry.extra.source) || "";
-    const description = entry.description || entry.msg || entry.message || "";
-    const extra = entry.extra && typeof entry.extra === "object" ? entry.extra : null;
-
-    const header = document.createElement("div");
-    header.className = "console-entry-header";
-
-    const meta = document.createElement("div");
-    meta.className = "console-entry-meta";
-
-    if (ts) {
-      const timeEl = document.createElement("span");
-      timeEl.className = "console-entry-time";
-      timeEl.textContent = ts;
-      meta.appendChild(timeEl);
-    }
-
-    if (source) {
-      const sourceEl = document.createElement("span");
-      sourceEl.className = "console-entry-source";
-      sourceEl.textContent = source;
-      meta.appendChild(sourceEl);
-    }
-
-    const levelEl = document.createElement("span");
-    levelEl.className = "console-entry-level";
-    levelEl.textContent = level;
-
-    header.appendChild(meta);
-    header.appendChild(levelEl);
-
-    const descEl = document.createElement("div");
-    descEl.className = "console-entry-description";
-    descEl.textContent = description;
-
-    card.appendChild(header);
-    card.appendChild(descEl);
-
-    if (extra && Object.keys(extra).length > 0) {
-      const tags = document.createElement("div");
-      tags.className = "console-tags";
-      Object.entries(extra).forEach(([key, value]) => {
-        const tag = document.createElement("span");
-        tag.className = "console-tag";
-        tag.textContent = `${key}: ${value}`;
-        tags.appendChild(tag);
-      });
-      card.appendChild(tags);
-    }
-
-    container.appendChild(card);
-  });
-
-  if (els.consoleAutoScroll && els.consoleAutoScroll.checked) {
-    container.scrollTop = container.scrollHeight;
-  }
-}
 
 function init() {
   loadConfig();
@@ -523,7 +377,6 @@ function init() {
   setupAutoRecordControls();
   setupLogControls();
   setupConfigButtons();
-  setupConsole();
   applyDefaultActiveStates();
   if (resolvedBaseUrl) {
     connectStreams();
