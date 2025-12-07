@@ -1,0 +1,605 @@
+2025-12-03 23:25:31 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-03 23:25:32 [INFO] pet_follower - Motion controller initialized
+2025-12-03 23:25:32 [INFO] pet_follower - Pet follower starting up
+2025-12-03 23:25:32 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-03 23:26:20 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-03 23:26:21 [INFO] pet_follower - Camera stopped
+2025-12-03 23:26:21 [INFO] pet_follower - Pet follower stopped
+2025-12-03 23:33:00 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-03 23:33:01 [INFO] pet_follower - Motion controller initialized
+2025-12-03 23:33:01 [INFO] pet_follower - Pet follower starting up
+2025-12-03 23:33:02 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-03 23:33:30 [WARNING] pet_follower - Obstacle 5.2 cm ahead - backing up
+2025-12-03 23:33:53 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-03 23:33:53 [INFO] pet_follower - Camera stopped
+2025-12-03 23:33:53 [INFO] pet_follower - Pet follower stopped
+2025-12-03 23:36:56 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-03 23:36:56 [INFO] pet_follower - Motion controller initialized
+2025-12-03 23:36:56 [INFO] pet_follower - Pet follower starting up
+2025-12-03 23:36:57 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-03 23:37:15 [WARNING] pet_follower - Obstacle 3.4 cm ahead - backing up
+2025-12-03 23:37:16 [WARNING] pet_follower - Obstacle 3.4 cm ahead - backing up
+2025-12-03 23:37:16 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:37:17 [WARNING] pet_follower - Obstacle 3.4 cm ahead - backing up
+2025-12-03 23:37:44 [WARNING] pet_follower - Obstacle 3.4 cm ahead - backing up
+2025-12-03 23:37:44 [WARNING] pet_follower - Obstacle 3.7 cm ahead - backing up
+2025-12-03 23:37:46 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:37:46 [WARNING] pet_follower - Obstacle 6.3 cm ahead - backing up
+2025-12-03 23:37:47 [WARNING] pet_follower - Obstacle 2.4 cm ahead - backing up
+2025-12-03 23:37:47 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:37:48 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:37:48 [WARNING] pet_follower - Obstacle 2.7 cm ahead - backing up
+2025-12-03 23:37:49 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:37:49 [WARNING] pet_follower - Obstacle 2.1 cm ahead - backing up
+2025-12-03 23:37:50 [WARNING] pet_follower - Obstacle 4.7 cm ahead - backing up
+2025-12-03 23:37:51 [WARNING] pet_follower - Obstacle 3.7 cm ahead - backing up
+2025-12-03 23:37:51 [WARNING] pet_follower - Obstacle 4.7 cm ahead - backing up
+2025-12-03 23:37:58 [WARNING] pet_follower - Obstacle 7.0 cm ahead - backing up
+2025-12-03 23:38:05 [WARNING] pet_follower - Obstacle 4.0 cm ahead - backing up
+2025-12-03 23:38:05 [WARNING] pet_follower - Obstacle 5.0 cm ahead - backing up
+2025-12-03 23:38:06 [WARNING] pet_follower - Obstacle 4.0 cm ahead - backing up
+2025-12-03 23:38:06 [WARNING] pet_follower - Obstacle 3.4 cm ahead - backing up
+2025-12-03 23:38:07 [WARNING] pet_follower - Obstacle 3.1 cm ahead - backing up
+2025-12-03 23:38:07 [WARNING] pet_follower - Obstacle 3.1 cm ahead - backing up
+2025-12-03 23:38:12 [WARNING] pet_follower - Obstacle 4.0 cm ahead - backing up
+2025-12-03 23:38:13 [WARNING] pet_follower - Obstacle 4.0 cm ahead - backing up
+2025-12-03 23:38:14 [WARNING] pet_follower - Obstacle 8.6 cm ahead - backing up
+2025-12-03 23:38:15 [WARNING] pet_follower - Obstacle 3.7 cm ahead - backing up
+2025-12-03 23:38:16 [WARNING] pet_follower - Obstacle 4.3 cm ahead - backing up
+2025-12-03 23:38:20 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:38:35 [WARNING] pet_follower - Obstacle 7.7 cm ahead - backing up
+2025-12-03 23:38:38 [WARNING] pet_follower - Obstacle 4.7 cm ahead - backing up
+2025-12-03 23:38:38 [WARNING] pet_follower - Obstacle 7.0 cm ahead - backing up
+2025-12-03 23:38:46 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:38:55 [WARNING] pet_follower - Obstacle 6.0 cm ahead - backing up
+2025-12-03 23:38:56 [WARNING] pet_follower - Obstacle 7.3 cm ahead - backing up
+2025-12-03 23:38:57 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:39:02 [WARNING] pet_follower - Obstacle 10.0 cm ahead - backing up
+2025-12-03 23:39:18 [WARNING] pet_follower - Obstacle 9.6 cm ahead - backing up
+2025-12-03 23:39:20 [WARNING] pet_follower - Obstacle 7.6 cm ahead - backing up
+2025-12-03 23:39:21 [WARNING] pet_follower - Obstacle 3.1 cm ahead - backing up
+2025-12-03 23:39:21 [WARNING] pet_follower - Obstacle 2.1 cm ahead - backing up
+2025-12-03 23:39:22 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:39:22 [WARNING] pet_follower - Obstacle 6.7 cm ahead - backing up
+2025-12-03 23:39:23 [WARNING] pet_follower - Obstacle 5.7 cm ahead - backing up
+2025-12-03 23:39:23 [WARNING] pet_follower - Obstacle 7.0 cm ahead - backing up
+2025-12-03 23:39:24 [WARNING] pet_follower - Obstacle 6.3 cm ahead - backing up
+2025-12-03 23:39:25 [WARNING] pet_follower - Obstacle 9.7 cm ahead - backing up
+2025-12-03 23:39:37 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:39:44 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:40:14 [WARNING] pet_follower - Obstacle 9.6 cm ahead - backing up
+2025-12-03 23:40:30 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-03 23:40:31 [INFO] pet_follower - Camera stopped
+2025-12-03 23:40:31 [INFO] pet_follower - Pet follower stopped
+2025-12-03 23:50:36 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-03 23:50:36 [INFO] pet_follower - Motion controller initialized
+2025-12-03 23:50:36 [INFO] pet_follower - Pet follower starting up
+2025-12-03 23:50:37 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-03 23:50:43 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:50:50 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:50:53 [WARNING] pet_follower - Obstacle 5.7 cm ahead - backing up
+2025-12-03 23:50:53 [WARNING] pet_follower - Obstacle 4.7 cm ahead - backing up
+2025-12-03 23:50:54 [WARNING] pet_follower - Obstacle 4.7 cm ahead - backing up
+2025-12-03 23:50:55 [WARNING] pet_follower - Obstacle 6.0 cm ahead - backing up
+2025-12-03 23:50:55 [WARNING] pet_follower - Obstacle 4.0 cm ahead - backing up
+2025-12-03 23:50:56 [WARNING] pet_follower - Obstacle 4.0 cm ahead - backing up
+2025-12-03 23:50:56 [WARNING] pet_follower - Obstacle 6.7 cm ahead - backing up
+2025-12-03 23:50:57 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:50:57 [WARNING] pet_follower - Obstacle 4.4 cm ahead - backing up
+2025-12-03 23:50:58 [WARNING] pet_follower - Obstacle 4.1 cm ahead - backing up
+2025-12-03 23:50:59 [WARNING] pet_follower - Obstacle 4.4 cm ahead - backing up
+2025-12-03 23:50:59 [WARNING] pet_follower - Obstacle 2.4 cm ahead - backing up
+2025-12-03 23:51:00 [WARNING] pet_follower - Obstacle 2.8 cm ahead - backing up
+2025-12-03 23:51:00 [WARNING] pet_follower - Obstacle 3.8 cm ahead - backing up
+2025-12-03 23:51:01 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:51:08 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:51:15 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:51:22 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:51:29 [INFO] pet_follower - Target acquired conf=0.37 dist=34.2cm offset=9.1
+2025-12-03 23:51:29 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:51:31 [INFO] pet_follower - Target acquired conf=0.38 dist=33.5cm offset=13.2
+2025-12-03 23:51:33 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:51:33 [INFO] pet_follower - Target acquired conf=0.31 dist=32.6cm offset=131.3
+2025-12-03 23:51:34 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:51:39 [INFO] pet_follower - Target acquired conf=0.43 dist=36.7cm offset=12.8
+2025-12-03 23:51:40 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:51:45 [INFO] pet_follower - Target acquired conf=0.61 dist=35.5cm offset=34.5
+2025-12-03 23:51:45 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:51:50 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:51:57 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:52:05 [INFO] pet_follower - Target acquired conf=0.72 dist=38.1cm offset=126.3
+2025-12-03 23:52:05 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:10 [INFO] pet_follower - Target acquired conf=0.42 dist=36.3cm offset=149.2
+2025-12-03 23:52:11 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:15 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:16 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:16 [INFO] pet_follower - Target acquired conf=0.74 dist=31.5cm offset=150.6
+2025-12-03 23:52:16 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:17 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:18 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:22 [INFO] pet_follower - Target acquired conf=0.44 dist=63.9cm offset=214.1
+2025-12-03 23:52:22 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:27 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:52:34 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:52:37 [INFO] pet_follower - Target acquired conf=0.32 dist=111.9cm offset=29.9
+2025-12-03 23:52:38 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:38 [INFO] pet_follower - Target acquired conf=0.34 dist=99.2cm offset=-286.8
+2025-12-03 23:52:39 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:39 [INFO] pet_follower - Target acquired conf=0.32 dist=105.5cm offset=152.6
+2025-12-03 23:52:39 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:40 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:40 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:42 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:43 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:46 [INFO] pet_follower - Target acquired conf=0.55 dist=109.1cm offset=21.3
+2025-12-03 23:52:48 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:48 [INFO] pet_follower - Target acquired conf=0.42 dist=106.1cm offset=139.4
+2025-12-03 23:52:48 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:52:49 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:54 [INFO] pet_follower - Target acquired conf=0.33 dist=110.1cm offset=15.1
+2025-12-03 23:52:55 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:52:56 [INFO] pet_follower - Target acquired conf=0.69 dist=108.3cm offset=132.6
+2025-12-03 23:52:57 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:00 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:53:01 [INFO] pet_follower - Target acquired conf=0.40 dist=106.8cm offset=9.1
+2025-12-03 23:53:03 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:03 [INFO] pet_follower - Target acquired conf=0.54 dist=105.0cm offset=124.3
+2025-12-03 23:53:03 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:53:04 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:53:04 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:53:05 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:53:06 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:11 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:53:17 [INFO] pet_follower - Target acquired conf=0.28 dist=114.6cm offset=-11.4
+2025-12-03 23:53:18 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:18 [INFO] pet_follower - Target acquired conf=0.36 dist=106.1cm offset=-282.0
+2025-12-03 23:53:19 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:24 [INFO] pet_follower - Target acquired conf=0.53 dist=93.4cm offset=5.2
+2025-12-03 23:53:25 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:25 [INFO] pet_follower - Target acquired conf=0.34 dist=102.0cm offset=-282.3
+2025-12-03 23:53:25 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:26 [INFO] pet_follower - Target acquired conf=0.37 dist=112.3cm offset=127.4
+2025-12-03 23:53:26 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:53:32 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:53:32 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-03 23:53:33 [INFO] pet_follower - Camera stopped
+2025-12-03 23:53:33 [INFO] pet_follower - Pet follower stopped
+2025-12-03 23:57:31 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-03 23:57:31 [INFO] pet_follower - Motion controller initialized
+2025-12-03 23:57:31 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-03 23:57:31 [INFO] pet_follower - Pet follower starting up
+2025-12-03 23:57:32 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-03 23:57:37 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:57:44 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:57:52 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:57:57 [INFO] pet_follower - Target acquired conf=0.53 dist=107.8cm offset=194.6
+2025-12-03 23:57:57 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:57:58 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:00 [INFO] pet_follower - Target acquired conf=0.26 dist=84.5cm offset=-129.1
+2025-12-03 23:58:00 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:01 [INFO] pet_follower - Target acquired conf=0.28 dist=109.9cm offset=-88.8
+2025-12-03 23:58:01 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:02 [INFO] pet_follower - Target acquired conf=0.33 dist=111.9cm offset=-86.9
+2025-12-03 23:58:03 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:09 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:58:16 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:58:23 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:58:25 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-03 23:58:26 [INFO] pet_follower - Target acquired conf=0.63 dist=87.5cm offset=41.9
+2025-12-03 23:58:27 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:27 [INFO] pet_follower - Target acquired conf=0.40 dist=49.5cm offset=-213.6
+2025-12-03 23:58:29 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:29 [INFO] pet_follower - Target acquired conf=0.42 dist=85.9cm offset=-242.8
+2025-12-03 23:58:30 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:30 [INFO] pet_follower - Target acquired conf=0.49 dist=87.4cm offset=-239.9
+2025-12-03 23:58:33 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:33 [INFO] pet_follower - Target acquired conf=0.63 dist=95.4cm offset=-233.2
+2025-12-03 23:58:34 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:35 [INFO] pet_follower - Target acquired conf=0.29 dist=104.5cm offset=-235.3
+2025-12-03 23:58:36 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:37 [INFO] pet_follower - Target acquired conf=0.64 dist=108.3cm offset=-237.6
+2025-12-03 23:58:41 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:42 [INFO] pet_follower - Target acquired conf=0.56 dist=57.2cm offset=-182.3
+2025-12-03 23:58:45 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:46 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:58:50 [INFO] pet_follower - Target acquired conf=0.32 dist=126.0cm offset=63.8
+2025-12-03 23:58:51 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:55 [INFO] pet_follower - Target acquired conf=0.26 dist=127.4cm offset=43.8
+2025-12-03 23:58:56 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:58:56 [INFO] pet_follower - Target acquired conf=0.44 dist=115.9cm offset=-234.5
+2025-12-03 23:58:59 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:59:00 [INFO] pet_follower - Target acquired conf=0.31 dist=93.8cm offset=-179.0
+2025-12-03 23:59:00 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:59:01 [INFO] pet_follower - Target acquired conf=0.31 dist=123.2cm offset=-224.4
+2025-12-03 23:59:02 [INFO] pet_follower - Target lost - entering search mode
+2025-12-03 23:59:07 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:59:09 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-03 23:59:09 [INFO] pet_follower - Camera stopped
+2025-12-03 23:59:09 [INFO] pet_follower - Pet follower stopped
+2025-12-03 23:59:43 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-03 23:59:43 [INFO] pet_follower - Motion controller initialized
+2025-12-03 23:59:43 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-03 23:59:43 [INFO] pet_follower - Pet follower starting up
+2025-12-03 23:59:44 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-03 23:59:50 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-03 23:59:57 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:00:04 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:00:07 [INFO] pet_follower - Target acquired conf=0.27 dist=112.2cm offset=132.9
+2025-12-04 00:00:08 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:12 [INFO] pet_follower - Target acquired conf=0.77 dist=66.2cm offset=96.8
+2025-12-04 00:00:13 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:14 [INFO] pet_follower - Target acquired conf=0.38 dist=66.7cm offset=120.3
+2025-12-04 00:00:15 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:18 [INFO] pet_follower - Target acquired conf=0.46 dist=66.8cm offset=258.8
+2025-12-04 00:00:18 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:23 [INFO] pet_follower - Target acquired conf=0.68 dist=48.2cm offset=223.5
+2025-12-04 00:00:24 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:25 [INFO] pet_follower - Target acquired conf=0.44 dist=48.0cm offset=-161.1
+2025-12-04 00:00:26 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:27 [INFO] pet_follower - Target acquired conf=0.87 dist=47.4cm offset=-79.7
+2025-12-04 00:00:27 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:28 [INFO] pet_follower - Target acquired conf=0.35 dist=36.3cm offset=-133.5
+2025-12-04 00:00:29 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:29 [INFO] pet_follower - Target acquired conf=0.31 dist=39.5cm offset=-64.0
+2025-12-04 00:00:30 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:30 [INFO] pet_follower - Target acquired conf=0.46 dist=46.0cm offset=-221.6
+2025-12-04 00:00:31 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:00:36 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:00:58 [INFO] pet_follower - Target acquired conf=0.84 dist=53.8cm offset=-277.7
+2025-12-04 00:00:58 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:03 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:01:10 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:01:14 [INFO] pet_follower - Target acquired conf=0.40 dist=74.2cm offset=200.4
+2025-12-04 00:01:14 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:18 [INFO] pet_follower - Target acquired conf=0.42 dist=77.4cm offset=82.6
+2025-12-04 00:01:18 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:23 [INFO] pet_follower - Target acquired conf=0.33 dist=62.8cm offset=-20.3
+2025-12-04 00:01:24 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:28 [INFO] pet_follower - Target acquired conf=0.29 dist=55.4cm offset=-105.9
+2025-12-04 00:01:29 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:30 [INFO] pet_follower - Target acquired conf=0.67 dist=51.3cm offset=-220.2
+2025-12-04 00:01:31 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:32 [INFO] pet_follower - Target acquired conf=0.57 dist=61.1cm offset=-164.3
+2025-12-04 00:01:32 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:33 [INFO] pet_follower - Target acquired conf=0.78 dist=69.3cm offset=-100.8
+2025-12-04 00:01:34 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:35 [INFO] pet_follower - Target acquired conf=0.35 dist=78.8cm offset=-51.4
+2025-12-04 00:01:35 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:40 [INFO] pet_follower - Target acquired conf=0.46 dist=82.5cm offset=-123.9
+2025-12-04 00:01:41 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:45 [INFO] pet_follower - Target acquired conf=0.40 dist=68.2cm offset=-126.6
+2025-12-04 00:01:46 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:50 [INFO] pet_follower - Target acquired conf=0.63 dist=43.4cm offset=72.3
+2025-12-04 00:01:51 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:01:56 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:01:59 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:02:03 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:02:04 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:02:11 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:02:12 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:02:12 [INFO] pet_follower - Camera stopped
+2025-12-04 00:02:12 [INFO] pet_follower - Pet follower stopped
+2025-12-04 00:10:36 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 00:10:37 [INFO] pet_follower - Motion controller initialized
+2025-12-04 00:10:37 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-04 00:10:37 [INFO] pet_follower - Pet follower starting up
+2025-12-04 00:10:38 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 00:10:43 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:10:50 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:10:57 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:11:01 [INFO] pet_follower - Target acquired conf=0.56 dist=76.8cm offset=90.6
+2025-12-04 00:11:07 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:11:08 [INFO] pet_follower - Target acquired conf=0.62 dist=84.0cm offset=-162.3
+2025-12-04 00:11:13 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:11:14 [INFO] pet_follower - Target acquired conf=0.38 dist=85.0cm offset=-223.3
+2025-12-04 00:11:35 [INFO] pet_follower - Target within 50.0 cm - triggering celebration
+2025-12-04 00:11:35 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:11:41 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:11:46 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:11:53 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:11:58 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:11:58 [INFO] pet_follower - Camera stopped
+2025-12-04 00:11:58 [INFO] pet_follower - Pet follower stopped
+2025-12-04 00:22:20 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 00:22:21 [INFO] pet_follower - Motion controller initialized
+2025-12-04 00:22:21 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-04 00:22:21 [INFO] pet_follower - Pet follower starting up
+2025-12-04 00:22:22 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 00:22:27 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:22:29 [INFO] pet_follower - Target acquired conf=0.64 dist=65.4cm offset=-255.3
+2025-12-04 00:22:29 [INFO] pet_follower - Ultrasonic distance 31.5 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:29 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:22:33 [INFO] pet_follower - Ultrasonic distance 30.2 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:33 [INFO] pet_follower - Ultrasonic distance 30.8 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:33 [INFO] pet_follower - Ultrasonic distance 30.2 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:34 [INFO] pet_follower - Ultrasonic distance 30.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:34 [INFO] pet_follower - Ultrasonic distance 30.5 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:35 [INFO] pet_follower - Ultrasonic distance 30.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:35 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:22:38 [INFO] pet_follower - Ultrasonic distance 38.1 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:38 [INFO] pet_follower - Ultrasonic distance 42.5 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:39 [INFO] pet_follower - Ultrasonic distance 36.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:39 [INFO] pet_follower - Ultrasonic distance 35.2 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:40 [INFO] pet_follower - Ultrasonic distance 35.2 cm <= interaction threshold 50.0 cm
+2025-12-04 00:22:40 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:22:45 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:22:50 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:22:55 [INFO] pet_follower - Target acquired conf=0.30 dist=95.6cm offset=56.4
+2025-12-04 00:23:02 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:23:07 [INFO] pet_follower - Target acquired conf=0.42 dist=90.6cm offset=94.0
+2025-12-04 00:23:12 [INFO] pet_follower - Ultrasonic distance 47.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:12 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:23:16 [INFO] pet_follower - Ultrasonic distance 27.9 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:16 [INFO] pet_follower - Ultrasonic distance 30.5 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:17 [INFO] pet_follower - Ultrasonic distance 32.6 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:17 [INFO] pet_follower - Ultrasonic distance 30.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:17 [INFO] pet_follower - Ultrasonic distance 28.2 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:18 [INFO] pet_follower - Ultrasonic distance 30.8 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:18 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:23:21 [INFO] pet_follower - Ultrasonic distance 31.5 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:21 [INFO] pet_follower - Ultrasonic distance 40.9 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:22 [INFO] pet_follower - Ultrasonic distance 43.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:22 [INFO] pet_follower - Ultrasonic distance 42.5 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:23 [INFO] pet_follower - Ultrasonic distance 43.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:23 [INFO] pet_follower - Ultrasonic distance 45.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:23 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:23:26 [INFO] pet_follower - Ultrasonic distance 43.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:27 [INFO] pet_follower - Ultrasonic distance 46.0 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:28 [INFO] pet_follower - Ultrasonic distance 47.8 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:28 [INFO] pet_follower - Ultrasonic distance 43.4 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:28 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:23:32 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:23:37 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:23:40 [INFO] pet_follower - Target acquired conf=0.41 dist=89.2cm offset=71.6
+2025-12-04 00:23:42 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:23:42 [INFO] pet_follower - Target acquired conf=0.41 dist=88.8cm offset=-183.5
+2025-12-04 00:23:46 [INFO] pet_follower - Ultrasonic distance 45.2 cm <= interaction threshold 50.0 cm
+2025-12-04 00:23:46 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:23:47 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:23:48 [INFO] pet_follower - Camera stopped
+2025-12-04 00:23:48 [INFO] pet_follower - Pet follower stopped
+2025-12-04 00:27:32 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 00:27:32 [INFO] pet_follower - Motion controller initialized
+2025-12-04 00:27:32 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-04 00:27:32 [INFO] pet_follower - Pet follower starting up
+2025-12-04 00:27:33 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 00:27:38 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:27:46 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:27:53 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:27:55 [INFO] pet_follower - Target acquired conf=0.39 dist=101.4cm offset=202.7
+2025-12-04 00:27:56 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:27:56 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:28:01 [INFO] pet_follower - Target acquired conf=0.81 dist=69.4cm offset=270.2
+2025-12-04 00:28:02 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:03 [INFO] pet_follower - Target acquired conf=0.48 dist=55.4cm offset=151.2
+2025-12-04 00:28:04 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:05 [INFO] pet_follower - Target acquired conf=0.51 dist=64.2cm offset=-150.3
+2025-12-04 00:28:06 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:07 [INFO] pet_follower - Target acquired conf=0.74 dist=66.2cm offset=-1.9
+2025-12-04 00:28:10 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:12 [INFO] pet_follower - Target acquired conf=0.90 dist=25.0cm offset=-142.9
+2025-12-04 00:28:12 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:28:17 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:18 [INFO] pet_follower - Target acquired conf=0.85 dist=31.1cm offset=-183.6
+2025-12-04 00:28:20 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:20 [WARNING] pet_follower - Obstacle 3.7 cm ahead - backing up
+2025-12-04 00:28:21 [INFO] pet_follower - Target acquired conf=0.65 dist=25.0cm offset=-158.3
+2025-12-04 00:28:22 [WARNING] pet_follower - Obstacle 7.0 cm ahead - backing up
+2025-12-04 00:28:22 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:22 [WARNING] pet_follower - Obstacle 8.0 cm ahead - backing up
+2025-12-04 00:28:23 [WARNING] pet_follower - Obstacle 6.0 cm ahead - backing up
+2025-12-04 00:28:24 [WARNING] pet_follower - Obstacle 2.4 cm ahead - backing up
+2025-12-04 00:28:24 [WARNING] pet_follower - Obstacle 2.7 cm ahead - backing up
+2025-12-04 00:28:25 [WARNING] pet_follower - Obstacle 7.6 cm ahead - backing up
+2025-12-04 00:28:25 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:28:32 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:28:35 [INFO] pet_follower - Target acquired conf=0.36 dist=35.9cm offset=282.6
+2025-12-04 00:28:38 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:39 [WARNING] pet_follower - Obstacle 7.9 cm ahead - backing up
+2025-12-04 00:28:40 [INFO] pet_follower - Target acquired conf=0.27 dist=25.0cm offset=-59.0
+2025-12-04 00:28:44 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:45 [WARNING] pet_follower - Obstacle 8.3 cm ahead - backing up
+2025-12-04 00:28:45 [WARNING] pet_follower - Obstacle 8.0 cm ahead - backing up
+2025-12-04 00:28:46 [WARNING] pet_follower - Obstacle 8.9 cm ahead - backing up
+2025-12-04 00:28:47 [INFO] pet_follower - Target acquired conf=0.43 dist=25.0cm offset=-50.4
+2025-12-04 00:28:49 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:28:54 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:29:01 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:29:05 [INFO] pet_follower - Target acquired conf=0.89 dist=52.3cm offset=-94.5
+2025-12-04 00:29:08 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:29:13 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:29:20 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:29:21 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:29:21 [INFO] pet_follower - Camera stopped
+2025-12-04 00:29:21 [INFO] pet_follower - Pet follower stopped
+2025-12-04 00:30:23 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 00:30:24 [INFO] pet_follower - Motion controller initialized
+2025-12-04 00:30:24 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-04 00:30:24 [INFO] pet_follower - Pet follower starting up
+2025-12-04 00:30:25 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 00:30:29 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:30:37 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:30:44 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:30:51 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:30:55 [INFO] pet_follower - Target acquired conf=0.46 dist=93.7cm offset=73.2
+2025-12-04 00:30:56 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:31:01 [INFO] pet_follower - Target acquired conf=0.31 dist=60.9cm offset=-299.6
+2025-12-04 00:31:03 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:31:04 [INFO] pet_follower - Target acquired conf=0.94 dist=40.1cm offset=11.0
+2025-12-04 00:31:04 [INFO] pet_follower - Ultrasonic distance 33.4 cm <= interaction threshold 40.0 cm
+2025-12-04 00:31:04 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:31:08 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:31:08 [WARNING] pet_follower - Obstacle 6.0 cm ahead - backing up
+2025-12-04 00:31:08 [WARNING] pet_follower - Obstacle 9.3 cm ahead - backing up
+2025-12-04 00:31:14 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:31:21 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:31:25 [INFO] pet_follower - Target acquired conf=0.70 dist=63.5cm offset=-15.0
+2025-12-04 00:31:28 [INFO] pet_follower - Ultrasonic distance 37.0 cm <= interaction threshold 40.0 cm
+2025-12-04 00:31:28 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:31:31 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:31:36 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:31:43 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:31:46 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:31:46 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:31:49 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:31:51 [WARNING] pet_follower - Obstacle 3.4 cm ahead - backing up
+2025-12-04 00:31:52 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:31:59 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:32:01 [INFO] pet_follower - Target acquired conf=0.91 dist=32.1cm offset=187.3
+2025-12-04 00:32:01 [INFO] pet_follower - Ultrasonic distance 29.4 cm <= interaction threshold 40.0 cm
+2025-12-04 00:32:01 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:32:04 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:32:06 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:32:09 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:32:10 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:32:10 [INFO] pet_follower - Camera stopped
+2025-12-04 00:32:10 [INFO] pet_follower - Pet follower stopped
+2025-12-04 00:34:36 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 00:34:36 [INFO] pet_follower - Motion controller initialized
+2025-12-04 00:34:36 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-04 00:34:36 [INFO] pet_follower - Pet follower starting up
+2025-12-04 00:34:37 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 00:34:42 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:34:47 [INFO] pet_follower - Target acquired conf=0.89 dist=66.3cm offset=93.4
+2025-12-04 00:34:49 [INFO] pet_follower - Ultrasonic distance 36.2 cm <= interaction threshold 40.0 cm
+2025-12-04 00:34:49 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:34:52 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:34:58 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:34:59 [WARNING] pet_follower - Obstacle 9.7 cm ahead - backing up
+2025-12-04 00:35:05 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:35:07 [INFO] pet_follower - Target acquired conf=0.75 dist=25.0cm offset=-56.9
+2025-12-04 00:35:07 [INFO] pet_follower - Ultrasonic distance 22.7 cm <= interaction threshold 40.0 cm
+2025-12-04 00:35:07 [INFO] pet_follower - Celebration spin: steering left and driving for 3.0s
+2025-12-04 00:35:10 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:35:12 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:35:12 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:35:13 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:35:14 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:35:14 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:35:15 [INFO] pet_follower - Camera stopped
+2025-12-04 00:35:15 [INFO] pet_follower - Pet follower stopped
+2025-12-04 00:37:58 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 00:37:58 [INFO] pet_follower - Motion controller initialized
+2025-12-04 00:37:58 [INFO] pet_follower - Interaction behaviors disabled; focusing on pet tracking
+2025-12-04 00:37:58 [INFO] pet_follower - Pet follower starting up
+2025-12-04 00:37:59 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 00:38:05 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:38:07 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:08 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:08 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:09 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:10 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:10 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:11 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:12 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 00:38:14 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 00:38:18 [INFO] pet_follower - Target acquired conf=0.88 dist=67.5cm offset=-7.6
+2025-12-04 00:38:30 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:38:30 [INFO] pet_follower - Target acquired conf=0.90 dist=51.1cm offset=-136.6
+2025-12-04 00:38:37 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:38:41 [INFO] pet_follower - Target acquired conf=0.91 dist=58.7cm offset=-225.3
+2025-12-04 00:38:43 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:38:45 [INFO] pet_follower - Target acquired conf=0.89 dist=35.3cm offset=-260.5
+2025-12-04 00:38:47 [INFO] pet_follower - Ultrasonic distance 32.6 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:47 [INFO] pet_follower - Celebration spin: steering left and driving for 6.0s
+2025-12-04 00:38:53 [INFO] pet_follower - Ultrasonic distance 26.5 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:54 [INFO] pet_follower - Ultrasonic distance 26.8 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:54 [INFO] pet_follower - Ultrasonic distance 27.1 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:54 [INFO] pet_follower - Ultrasonic distance 26.5 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:55 [INFO] pet_follower - Ultrasonic distance 25.9 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:55 [INFO] pet_follower - Ultrasonic distance 26.5 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:55 [INFO] pet_follower - Ultrasonic distance 25.6 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:56 [INFO] pet_follower - Ultrasonic distance 25.0 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:56 [INFO] pet_follower - Ultrasonic distance 25.4 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:57 [INFO] pet_follower - Ultrasonic distance 25.6 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:57 [INFO] pet_follower - Ultrasonic distance 25.3 cm <= interaction threshold 40.0 cm
+2025-12-04 00:38:57 [INFO] pet_follower - Celebration spin: steering left and driving for 6.0s
+2025-12-04 00:39:03 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 00:39:07 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 00:39:08 [INFO] pet_follower - Camera stopped
+2025-12-04 00:39:08 [INFO] pet_follower - Pet follower stopped
+2025-12-04 01:28:10 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 01:28:10 [INFO] pet_follower - Motion controller initialized
+2025-12-04 01:28:10 [INFO] pet_follower - Interaction ready with 2 celebration behaviors
+2025-12-04 01:28:10 [INFO] pet_follower - Pet follower starting up
+2025-12-04 01:28:11 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 01:28:16 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 01:28:18 [INFO] pet_follower - Target acquired conf=0.89 dist=57.2cm offset=-274.4
+2025-12-04 01:28:22 [INFO] pet_follower - Ultrasonic distance 36.8 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:22 [INFO] pet_follower - Starting celebration: _celebration_spin
+2025-12-04 01:28:29 [INFO] pet_follower - Ultrasonic distance 36.7 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:35 [INFO] pet_follower - Ultrasonic distance 32.6 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:35 [INFO] pet_follower - Starting celebration: _celebration_bounce
+2025-12-04 01:28:44 [INFO] pet_follower - Ultrasonic distance 37.7 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:44 [INFO] pet_follower - Ultrasonic distance 30.0 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:45 [INFO] pet_follower - Ultrasonic distance 25.1 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:45 [INFO] pet_follower - Ultrasonic distance 24.6 cm <= interaction threshold 40.0 cm
+2025-12-04 01:28:45 [INFO] pet_follower - Starting celebration: _celebration_bounce
+2025-12-04 01:29:09 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 01:29:10 [INFO] pet_follower - Target acquired conf=0.69 dist=84.6cm offset=-67.2
+2025-12-04 01:29:12 [INFO] pet_follower - Target lost - entering search mode
+                                                                                                                                                                                                                                                                                            2025-12-04 20:08:07 [INFO] pet_follower - Loading YOLO model from yolov8n.pt
+2025-12-04 20:08:08 [INFO] pet_follower - Motion controller initialized
+2025-12-04 20:08:08 [INFO] pet_follower - Interaction ready with 2 celebration behaviors
+2025-12-04 20:08:08 [INFO] pet_follower - Pet follower starting up
+2025-12-04 20:08:09 [INFO] pet_follower - Picamera2 started with resolution 640x480 format=RGB888
+2025-12-04 20:08:18 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:08:21 [WARNING] pet_follower - Obstacle 7.0 cm ahead - backing up
+2025-12-04 20:08:24 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:08:28 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:08:33 [INFO] pet_follower - Target acquired conf=0.37 dist=29.9cm offset=-226.6
+2025-12-04 20:08:33 [INFO] pet_follower - Ultrasonic distance 26.8 cm <= interaction threshold 40.0 cm
+2025-12-04 20:08:33 [INFO] pet_follower - Starting celebration: _celebration_bounce
+2025-12-04 20:08:40 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 20:08:45 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:08:52 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:08:59 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:09:06 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:09:10 [INFO] pet_follower - Target acquired conf=0.26 dist=136.8cm offset=-3.4
+2025-12-04 20:09:12 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 20:09:12 [INFO] pet_follower - Target acquired conf=0.41 dist=93.2cm offset=207.0
+2025-12-04 20:09:14 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 20:09:18 [INFO] pet_follower - Target acquired conf=0.30 dist=70.4cm offset=39.8
+2025-12-04 20:09:19 [INFO] pet_follower - Ultrasonic distance 36.8 cm <= interaction threshold 40.0 cm
+2025-12-04 20:09:19 [INFO] pet_follower - Starting celebration: _celebration_spin
+2025-12-04 20:09:25 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 20:09:28 [INFO] pet_follower - Target acquired conf=0.54 dist=31.2cm offset=-218.7
+2025-12-04 20:09:29 [INFO] pet_follower - Target lost - entering search mode
+2025-12-04 20:09:31 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:32 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:33 [WARNING] pet_follower - Obstacle 8.6 cm ahead - backing up
+2025-12-04 20:09:33 [WARNING] pet_follower - Obstacle 3.8 cm ahead - backing up
+2025-12-04 20:09:34 [WARNING] pet_follower - Obstacle 3.1 cm ahead - backing up
+2025-12-04 20:09:34 [WARNING] pet_follower - Obstacle 5.0 cm ahead - backing up
+2025-12-04 20:09:35 [WARNING] pet_follower - Obstacle 5.0 cm ahead - backing up
+2025-12-04 20:09:35 [WARNING] pet_follower - Obstacle 5.4 cm ahead - backing up
+2025-12-04 20:09:36 [WARNING] pet_follower - Obstacle 8.3 cm ahead - backing up
+2025-12-04 20:09:36 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:37 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:38 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:38 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:09:45 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:09:47 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:48 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:48 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:49 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:50 [WARNING] pet_follower - Obstacle -2.0 cm ahead - backing up
+2025-12-04 20:09:52 [INFO] pet_follower - Search timeout exceeded - request chassis turn
+2025-12-04 20:09:56 [INFO] pet_follower - Target acquired conf=0.71 dist=92.9cm offset=289.1
+2025-12-04 20:09:58 [INFO] pet_follower - Ultrasonic distance 38.9 cm <= interaction threshold 40.0 cm
+2025-12-04 20:09:58 [INFO] pet_follower - Starting celebration: _celebration_bounce
+2025-12-04 20:10:04 [INFO] pet_follower - Ultrasonic distance 36.5 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:05 [INFO] pet_follower - Ultrasonic distance 36.6 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:05 [INFO] pet_follower - Ultrasonic distance 36.6 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:06 [INFO] pet_follower - Ultrasonic distance 37.0 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:06 [INFO] pet_follower - Ultrasonic distance 37.0 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:06 [INFO] pet_follower - Ultrasonic distance 37.0 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:07 [INFO] pet_follower - Ultrasonic distance 36.6 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:07 [INFO] pet_follower - Ultrasonic distance 36.5 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:07 [INFO] pet_follower - Ultrasonic distance 36.6 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:08 [INFO] pet_follower - Ultrasonic distance 37.0 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:08 [INFO] pet_follower - Ultrasonic distance 37.0 cm <= interaction threshold 40.0 cm
+2025-12-04 20:10:08 [INFO] pet_follower - Starting celebration: _celebration_spin
+2025-12-04 20:10:14 [INFO] pet_follower - Pet follower interrupted by user
+2025-12-04 20:10:14 [INFO] pet_follower - Camera stopped
+2025-12-04 20:10:14 [INFO] pet_follower - Pet follower stopped
