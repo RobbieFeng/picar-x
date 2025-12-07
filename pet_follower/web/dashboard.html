@@ -140,20 +140,29 @@
               <section>
                 <h3>Cloud</h3>
                 <div class="button-row">
-                  <button data-action="snapshot">Upload snapshot</button>
-                  <button data-action="record_video" data-duration="10">Record video</button>
+                  <button data-action="snapshot">Snapshot</button>
+                  <button data-action="record_video" data-duration="10">Recording</button>
                   <button data-action="mark" class="ghost">Add marker</button>
                 </div>
                 <div class="auto-record">
                   <label class="checkbox">
                     <input type="checkbox" id="autoRecordToggle" /> Auto record when target detected
                   </label>
-                  <label class="slider-label">
-                    Interval (minutes): <span id="autoRecordIntervalLabel">3</span>
-                    <input type="range" min="1" max="10" value="3" id="autoRecordInterval" />
-                  </label>
-                  <div class="auto-record-actions">
-                    <button class="ghost" id="applyAutoRecord">Apply auto recording</button>
+                  <div class="auto-record-controls">
+                    <label class="slider-label interval-input">
+                      Interval (minutes)
+                      <input
+                        type="number"
+                        min="1"
+                        max="100"
+                        step="1"
+                        value="3"
+                        inputmode="numeric"
+                        id="autoRecordInterval"
+                        required
+                      />
+                    </label>
+                    <button class="ghost" id="applyAutoRecord">Confirm</button>
                   </div>
                   <div class="auto-record-meta">
                     <div class="status-text" id="autoRecordStatus">Disabled</div>

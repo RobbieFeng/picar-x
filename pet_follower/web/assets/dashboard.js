@@ -28,10 +28,15 @@ const els = {
   durationValue: document.getElementById("durationValue"),
   autoRecordToggle: document.getElementById("autoRecordToggle"),
   autoRecordInterval: document.getElementById("autoRecordInterval"),
-  autoRecordIntervalLabel: document.getElementById("autoRecordIntervalLabel"),
   autoRecordStatus: document.getElementById("autoRecordStatus"),
   applyAutoRecord: document.getElementById("applyAutoRecord"),
   autoRecordLast: document.getElementById("autoRecordLast"),
+};
+
+const AUTO_RECORD_INTERVAL = {
+  min: 1,
+  max: 100,
+  defaultMinutes: 3,
 };
 
 const STORAGE_KEY = "petFollowerDashboard";
@@ -41,6 +46,39 @@ let config = {
 let pollTimer = null;
 let eventSource = null;
 let resolvedBaseUrl = "";
+
+function clampAutoRecordInterval(value) {
+  const numericValue = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(numericValue)) {
+    return AUTO_RECORD_INTERVAL.defaultMinutes;
+  }
+  const rounded = Math.round(numericValue);
+  return Math.min(AUTO_RECORD_INTERVAL.max, Math.max(AUTO_RECORD_INTERVAL.min, rounded));
+}
+
+function readAutoRecordInterval(reportError = false) {
+  if (!els.autoRecordInterval) return null;
+  const raw = (els.autoRecordInterval.value || "").trim();
+  const rangeMessage = `Enter a whole number between ${AUTO_RECORD_INTERVAL.min} and ${AUTO_RECORD_INTERVAL.max}`;
+  if (!raw) {
+    els.autoRecordInterval.setCustomValidity("Interval is required");
+    if (reportError) els.autoRecordInterval.reportValidity();
+    return null;
+  }
+  if (!/^\d+$/.test(raw)) {
+    els.autoRecordInterval.setCustomValidity(rangeMessage);
+    if (reportError) els.autoRecordInterval.reportValidity();
+    return null;
+  }
+  const minutes = Number(raw);
+  if (minutes < AUTO_RECORD_INTERVAL.min || minutes > AUTO_RECORD_INTERVAL.max) {
+    els.autoRecordInterval.setCustomValidity(rangeMessage);
+    if (reportError) els.autoRecordInterval.reportValidity();
+    return null;
+  }
+  els.autoRecordInterval.setCustomValidity("");
+  return minutes;
+}
 
 function loadConfig() {
   try {
@@ -166,7 +204,7 @@ function formatRelativeTime(value) {
 async function sendAction(action, extra = {}) {
   if (!resolvedBaseUrl) {
     logEvent("warn", "API address not configured");
-    return;
+    return false;
   }
   try {
     const resp = await fetch(`${resolvedBaseUrl}/api/commands`, {
@@ -178,8 +216,10 @@ async function sendAction(action, extra = {}) {
     const data = await resp.json();
     if (data.status) logEvent("system", data.status);
     if (data.state) updateStatusUI(data.state);
+    return true;
   } catch (err) {
     logEvent("error", `Action ${action} failed: ${err.message}`);
+    return false;
   }
 }
 
@@ -200,7 +240,7 @@ function applyDefaultActiveStates() {
 
 function setupButtons() {
   document.querySelectorAll("[data-action]").forEach((btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", async () => {
       const action = btn.dataset.action;
       if (!action) return;
       setButtonActive(btn);
@@ -210,7 +250,13 @@ function setupButtons() {
         sendAction("force_search");
       } else if (action === "record_video") {
         const duration = Number(btn.dataset.duration || 10);
-        sendAction("record_video", { duration });
+        logEvent("system", `Recording video for ${duration} seconds...`);
+        const ok = await sendAction("record_video", { duration });
+        if (ok) {
+          logEvent("system", "Recording finished");
+        } else {
+          logEvent("warn", "Recording failed");
+        }
       } else if (action === "mark") {
         sendAction("mark_event", { note: prompt("Enter event note", "") });
       } else {
@@ -244,16 +290,16 @@ function setupSliders() {
 }
 
 function setupAutoRecordControls() {
-  if (!els.autoRecordInterval || !els.autoRecordIntervalLabel) return;
-  const syncLabel = () => {
-    els.autoRecordIntervalLabel.textContent = els.autoRecordInterval.value;
-  };
-  els.autoRecordInterval.addEventListener("input", syncLabel);
-  syncLabel();
+  if (!els.autoRecordInterval) return;
+  els.autoRecordInterval.addEventListener("input", () => {
+    readAutoRecordInterval(false);
+  });
+  readAutoRecordInterval(false);
   if (els.applyAutoRecord) {
     els.applyAutoRecord.addEventListener("click", () => {
+      const minutes = readAutoRecordInterval(true);
+      if (minutes === null) return;
       const enabled = !!(els.autoRecordToggle && els.autoRecordToggle.checked);
-      const minutes = Number(els.autoRecordInterval.value || 3);
       sendAction("auto_recording", { enabled, interval: minutes * 60 });
     });
   }
@@ -261,12 +307,11 @@ function setupAutoRecordControls() {
 
 function updateAutoRecordUI(info) {
   if (!els.autoRecordToggle || !els.autoRecordInterval) return;
-  const minutes = Math.round((info.interval || 180) / 60);
+  const intervalSeconds = info.interval ?? AUTO_RECORD_INTERVAL.defaultMinutes * 60;
+  const minutes = clampAutoRecordInterval(intervalSeconds / 60);
   els.autoRecordToggle.checked = !!info.enabled;
-  els.autoRecordInterval.value = String(Math.max(1, Math.min(minutes, 10)));
-  if (els.autoRecordIntervalLabel) {
-    els.autoRecordIntervalLabel.textContent = els.autoRecordInterval.value;
-  }
+  els.autoRecordInterval.value = String(minutes);
+  els.autoRecordInterval.setCustomValidity("");
   let status = "Auto recording disabled";
   let lastText = "No clips yet";
   if (info.enabled) {

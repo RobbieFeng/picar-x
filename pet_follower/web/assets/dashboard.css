@@ -183,7 +183,7 @@ button.ghost {
   display: grid;
   grid-template-columns: minmax(560px, 1fr) 340px;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
 }
 
 .column {
@@ -230,7 +230,7 @@ button.ghost {
 
 .video-wrapper {
   position: relative;
-  height: 340px;
+  height: 500px;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid #dbe3f5;
@@ -316,11 +316,19 @@ button.ghost {
   padding-top: 10px;
 }
 
-.auto-record-actions {
+.auto-record-controls {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+.auto-record-controls label {
+  flex: 1;
+}
+
+.auto-record-controls button {
+  white-space: nowrap;
 }
 
 .auto-record-meta {
@@ -376,13 +384,28 @@ button.ghost {
   width: 100%;
 }
 
+.interval-input input[type="number"] {
+  max-width: 140px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d9ec;
+  background: #fff;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interval-input input[type="number"]:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(74, 142, 245, 0.2);
+  outline: none;
+}
+
 .log-panel ul {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 260px;
-  min-height: 260px;
+  max-height: 320px;
+  min-height: 320px;
   overflow-y: auto;
   padding-right: 8px;
 }
