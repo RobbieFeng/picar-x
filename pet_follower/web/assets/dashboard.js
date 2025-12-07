@@ -45,7 +45,6 @@ let pollTimer = null;
 let eventSource = null;
 let consolePollTimer = null;
 let resolvedBaseUrl = "";
-const GCP_LOG_ENDPOINT = "/api/gcp-log";
 const CONSOLE_POLL_INTERVAL = 10000; // 10 seconds
 
 function loadConfig() {
@@ -397,8 +396,19 @@ function startConsolePolling() {
 
 async function loadLocalConsoleLog() {
   if (!els.consoleBody) return;
+  if (!resolvedBaseUrl) {
+    renderConsoleLog([
+      {
+        ts: "",
+        level: "error",
+        source: "console",
+        msg: "API address not configured",
+      },
+    ]);
+    return;
+  }
   try {
-    const resp = await fetch(GCP_LOG_ENDPOINT, { cache: "no-store" });
+    const resp = await fetch(`${resolvedBaseUrl}/api/gcp-log`, { cache: "no-store" });
     if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     const data = await resp.json();
     
