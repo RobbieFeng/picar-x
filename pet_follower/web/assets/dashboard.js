@@ -29,6 +29,12 @@ const els = {
   consoleBody: document.getElementById("robotConsole"),
   consoleReload: document.getElementById("consoleReload"),
   consoleAutoScroll: document.getElementById("consoleAutoScroll"),
+  autoRecordToggle: document.getElementById("autoRecordToggle"),
+  autoRecordInterval: document.getElementById("autoRecordInterval"),
+  autoRecordIntervalLabel: document.getElementById("autoRecordIntervalLabel"),
+  autoRecordStatus: document.getElementById("autoRecordStatus"),
+  applyAutoRecord: document.getElementById("applyAutoRecord"),
+  autoRecordLast: document.getElementById("autoRecordLast"),
 };
 
 const STORAGE_KEY = "petFollowerDashboard";
@@ -137,6 +143,9 @@ function updateStatusUI(payload = {}) {
   els.statusList.fpsLabel.textContent = fps ? fps.toFixed(1) : "-";
   const msg = payload.last_log || payload.message || "-";
   els.statusList.lastMessage.textContent = msg;
+  if (payload.auto_recording) {
+    updateAutoRecordUI(payload.auto_recording);
+  }
 
   if (motion.safe_to_move === false) {
     els.stateOverlay.dataset.blocked = "true";
@@ -180,15 +189,34 @@ async function sendAction(action, extra = {}) {
   }
 }
 
+function setButtonActive(btn) {
+  if (!btn || !btn.dataset || !btn.dataset.group) return;
+  const group = btn.dataset.group;
+  document.querySelectorAll(`[data-group="${group}"]`).forEach((el) => {
+    el.classList.remove("is-active");
+  });
+  btn.classList.add("is-active");
+}
+
+function applyDefaultActiveStates() {
+  document.querySelectorAll("[data-default-active]").forEach((btn) => {
+    setButtonActive(btn);
+  });
+}
+
 function setupButtons() {
   document.querySelectorAll("[data-action]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const action = btn.dataset.action;
       if (!action) return;
+      setButtonActive(btn);
       if (action === "snapshot") {
         sendAction("capture_frame");
       } else if (action === "search") {
         sendAction("force_search");
+      } else if (action === "record_video") {
+        const duration = Number(btn.dataset.duration || 10);
+        sendAction("record_video", { duration });
       } else if (action === "mark") {
         sendAction("mark_event", { note: prompt("Enter event note", "") });
       } else {
@@ -200,6 +228,7 @@ function setupButtons() {
   document.querySelectorAll("[data-drive]").forEach((btn) => {
     btn.addEventListener("click", () => {
       const direction = btn.dataset.drive;
+      setButtonActive(btn);
       const payload = {
         direction,
         speed: Number(els.speedSlider.value),
@@ -218,6 +247,56 @@ function setupSliders() {
   els.speedSlider.addEventListener("input", sync);
   els.durationSlider.addEventListener("input", sync);
   sync();
+}
+
+function setupAutoRecordControls() {
+  if (!els.autoRecordInterval || !els.autoRecordIntervalLabel) return;
+  const syncLabel = () => {
+    els.autoRecordIntervalLabel.textContent = els.autoRecordInterval.value;
+  };
+  els.autoRecordInterval.addEventListener("input", syncLabel);
+  syncLabel();
+  if (els.applyAutoRecord) {
+    els.applyAutoRecord.addEventListener("click", () => {
+      const enabled = !!(els.autoRecordToggle && els.autoRecordToggle.checked);
+      const minutes = Number(els.autoRecordInterval.value || 3);
+      sendAction("auto_recording", { enabled, interval: minutes * 60 });
+    });
+  }
+}
+
+function updateAutoRecordUI(info) {
+  if (!els.autoRecordToggle || !els.autoRecordInterval) return;
+  const minutes = Math.round((info.interval || 180) / 60);
+  els.autoRecordToggle.checked = !!info.enabled;
+  els.autoRecordInterval.value = String(Math.max(1, Math.min(minutes, 10)));
+  if (els.autoRecordIntervalLabel) {
+    els.autoRecordIntervalLabel.textContent = els.autoRecordInterval.value;
+  }
+  let status = "Auto recording disabled";
+  let lastText = "No clips yet";
+  if (info.enabled) {
+    const secondsUntil = info.seconds_until_next ?? 0;
+    if (info.active) {
+      status = "Recording clip...";
+    } else if (!info.eligible) {
+      const minutesLeft = secondsUntil / 60;
+      status = `Ready in ${minutesLeft.toFixed(1)} min`;
+    } else {
+      status = "Ready to record on next detection";
+    }
+  }
+  if (info.last_uploaded_at) {
+    const lastDate = new Date(info.last_uploaded_at * 1000);
+    const since = formatDurationSeconds(info.seconds_since_last);
+    lastText = `Last clip: ${lastDate.toLocaleTimeString()}${since ? ` (${since} ago)` : ""}`;
+  }
+  if (els.autoRecordStatus) {
+    els.autoRecordStatus.textContent = status;
+  }
+  if (els.autoRecordLast) {
+    els.autoRecordLast.textContent = lastText;
+  }
 }
 
 function logEvent(level, text) {
@@ -431,9 +510,11 @@ function init() {
   loadConfig();
   setupButtons();
   setupSliders();
+  setupAutoRecordControls();
   setupLogControls();
   setupConfigButtons();
   setupConsole();
+  applyDefaultActiveStates();
   if (resolvedBaseUrl) {
     connectStreams();
   } else {
@@ -464,4 +545,11 @@ function normalizeBaseUrl(input) {
     logEvent("warn", `Invalid address: ${input}`);
     return "";
   }
+}
+
+function formatDurationSeconds(seconds) {
+  if (seconds == null || seconds < 0) return "";
+  if (seconds < 60) return `${Math.round(seconds)}s`;
+  if (seconds < 3600) return `${(seconds / 60).toFixed(1)} min`;
+  return `${(seconds / 3600).toFixed(1)} h`;
 }

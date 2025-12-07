@@ -280,10 +280,42 @@ button.ghost {
   margin-bottom: 12px;
 }
 
+.auto-record {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.auto-record-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.auto-record-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 6px;
+}
+
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.control-panel [data-group].is-active {
+  background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 12px 20px rgba(74, 142, 245, 0.25);
+}
+
+.control-panel [data-group].is-active.ghost {
+  border-color: transparent;
 }
 
 .drive-grid {

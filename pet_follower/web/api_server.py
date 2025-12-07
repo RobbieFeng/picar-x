@@ -58,6 +58,12 @@ def api_commands(payload: Dict[str, Any] = Body(...)) -> Dict[str, Any]:
             message = runtime.force_search()
         elif action == "capture_frame":
             message = runtime.capture_snapshot()
+        elif action == "record_video":
+            message = runtime.record_video(payload.get("duration", 10.0))
+        elif action == "auto_recording":
+            message = runtime.configure_auto_recording(
+                enabled=payload.get("enabled"), interval=payload.get("interval")
+            )
         elif action == "manual_drive":
             message = runtime.manual_drive(
                 payload.get("direction", ""), payload.get("speed", 40), payload.get("duration", 0.8)
