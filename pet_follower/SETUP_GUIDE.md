@@ -52,10 +52,10 @@ sudo python3 install.py
 
 This project uses modern Python libraries for the web server (FastAPI) and AI object detection (YOLO/Ultralytics).
 
-Navigate to the `pet_follower` directory (where this file is located) and run:
+Navigate to the project directory (where this file is located) and run:
 
 ```bash
-cd /path/to/your/project/picar-x/pet_follower
+cd /path/to/your/project
 pip3 install -r requirements.txt
 ```
 
@@ -63,11 +63,10 @@ pip3 install -r requirements.txt
 
 ## 4. Verification
 
-To verify the installation, go back to the project root (`picar-x`) and run:
+To verify the installation, run:
 
 ```bash
-cd ..
-python3 -m pet_follower.api_server --help
+python3 api_server.py --help
 ```
 
 If you see the help message, the environment is set up correctly.

@@ -14,11 +14,11 @@ import tempfile
 
 import cv2
 
-from pet_follower.utils.interaction import InteractionManager
-from pet_follower.utils.log import logger
-from pet_follower.utils.motion import MotionController
-from pet_follower.utils.vision import CameraStream, DetectionResult, DogDetector
-from pet_follower.utils.cloud_client import send_frame_bgr, send_video_file
+from utils.interaction import InteractionManager
+from utils.log import logger
+from utils.motion import MotionController
+from utils.vision import CameraStream, DetectionResult, DogDetector
+from utils.cloud_client import send_frame_bgr, send_video_file
 
 LOOP_DELAY = 0.02
 SMART_SNAPSHOT_STILLNESS_SEC = 10.0

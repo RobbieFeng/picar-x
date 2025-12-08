@@ -6,8 +6,7 @@ from pathlib import Path
 from typing import List, Sequence, Tuple
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-PROJECT_ROOT = BASE_DIR.parent
-
+PROJECT_ROOT = BASE_DIR
 
 @dataclass
 class CameraConfig:
@@ -83,7 +82,7 @@ class InteractionConfig:
 @dataclass
 class LoggingConfig:
     level: str = "INFO"
-    log_path: Path = PROJECT_ROOT / "pet_follower" / "pet_follower.log"
+    log_path: Path = PROJECT_ROOT / "pet_follower.log"
 
 
 @dataclass

@@ -10,8 +10,8 @@ from fastapi import Body, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
-from pet_follower.utils.log import logger
-from pet_follower.web.runtime import CameraManager, EventBus, PetFollowerRuntime
+from utils.log import logger
+from web.runtime import CameraManager, EventBus, PetFollowerRuntime
 
 # GCP server configuration for activity logs
 GCP_SERVER_URL = "http://34.61.99.220:5000"  # Cloud server that stores pet activity logs

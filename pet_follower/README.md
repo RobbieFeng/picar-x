@@ -12,16 +12,16 @@ The main entry point is the web API server, which provides a dashboard for contr
 
 ### 1. Start the Server
 
-Run the following command from the **project root** (the parent directory of `pet_follower`):
+Run the following command from the **project root**:
 
 ```bash
-python3 -m pet_follower.api_server
+python3 api_server.py
 ```
 
 By default, the server listens on port **8000**. You can specify a different host or port:
 
 ```bash
-python3 -m pet_follower.api_server --host 0.0.0.0 --port 8080
+python3 api_server.py --host 0.0.0.0 --port 8080
 ```
 
 ### 2. Access the Dashboard
